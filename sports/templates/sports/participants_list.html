@@ -9,10 +9,21 @@
     <h2>There are currently no participants in this tournament</h2>
 
 {% else %}
+<div style="width: 80%;text-align: center;padding: 50px 0px 50px 200px ">
+    <table class="auto-index">
+  <tr>
+    <th>Serial number</th>
+    <td>Name </td>
+    <td>Email </td>
     {% for participant in participants %}
-        Name: {{ participant.name }} <br>
-        Email: {{ participant.mail }} <br>
-        <br><br>
+        <tr>
+        <td></td>
+        <td>{{ participant.name }} </td>
+        <td>{{ participant.mail }} </td>
+        </tr>
     {% endfor %}
+
+</table>
+</div>
 {% endif %}
 {% endblock %}
