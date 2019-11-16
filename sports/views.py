@@ -70,7 +70,6 @@ class Sport_InfoDetailView(DetailView):
     template_name = 'sports/sport_info.html'
 
 
-@login_required
 def tournament_list(request):
     tournaments = Tournaments.objects.all()
     if request.user.is_authenticated:
@@ -229,6 +228,9 @@ def tournamentsJoin(request):
         serializer = JoinTournamentSerializer(data=data)
         print(data)
         if serializer.is_valid():
+            tournament = Tournaments.objects.get(pk=data['tournament'])
+            tournament.no_of_joined += 1
+            tournament.save()
             print('User Joined')
             print(data['tournament'])
             t = Tournaments.objects.get(pk=data['tournament'])
