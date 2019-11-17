@@ -53,12 +53,12 @@ def payment_done(request):
 
     send_mail(subject, message, email_from, recipient_list, fail_silently=False, html_message=html)
     messages.info(request, "Thank you! Your purchase was successful!")
-    return render(request, 'payment/done.html')
+    return render(request, 'payment/done.html', {'Shopping': 'active'})
 
 
 @csrf_exempt
 def payment_canceled(request):
-    return render(request, 'payment/canceled.html')
+    return render(request, 'payment/canceled.html', {'Shopping': 'active'})
 
 
 def payment_process(request):
@@ -79,5 +79,5 @@ def payment_process(request):
     }
 
     form = PayPalPaymentsForm(initial=paypal_dict)
-    context = {"form": form, 'order': order}
+    context = {"form": form, 'order': order, 'Shopping': 'active'}
     return render(request, "payment/process.html", context)

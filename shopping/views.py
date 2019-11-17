@@ -12,7 +12,8 @@ from .serializers import ProductSerializer, CategorySerializer
 def list_categories(request):
     categories = Category.objects.all()
     products = Product.objects.all()
-    return render(request, 'shopping/index.html', {'categories': categories, 'products': products})
+    return render(request, 'shopping/index.html',
+                  {'categories': categories, 'products': products, 'Shopping': 'active'})
 
 
 def itemsview(request, pk):
@@ -29,7 +30,8 @@ def itemsview(request, pk):
     context = {
         'categories': categories,
         'cat': cat,
-        'current_order_products': current_order_products
+        'current_order_products': current_order_products,
+        'Shopping': 'active'
     }
 
     return render(request, "shopping/items.html", context)
@@ -57,7 +59,8 @@ def itemdetailview(request, pk, ck):
                                                         'categories': categories,
                                                         'cat': cat,
                                                         'prod': prod,
-                                                        'current_order_products': current_order_products, })
+                                                        'current_order_products': current_order_products,
+                                                        'Shopping': 'active'})
 
 
 @login_required
@@ -75,7 +78,7 @@ def reviewtext(request, categ, product):
             return redirect(reverse('shopping:specificitem', args=(product, categ,)))
     else:
         form = writereview()
-    return render(request, 'shopping/writereview.html', {'form': form})
+    return render(request, 'shopping/writereview.html', {'form': form, 'Shopping': 'active'})
 
 
 @api_view(['GET'])

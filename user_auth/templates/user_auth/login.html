@@ -12,6 +12,9 @@
                 <form class="booking-form" method="post">
                     {% csrf_token %}
                         <div class="hero-content" style="padding:0px 0px 30px 0px;  font-size:35px; color: black;">Log In</div>
+                    {% if form.errors %}
+                        <h6 style="font-size: 15px; text-align:center;color:red">Your username and password didn't match.</h6>
+                    {% endif %}
                     {% for field in form %}
                     <div class="form-group form-input">
                         <span class="form-label">{{ field.label_tag }}</span><br>
@@ -27,9 +30,7 @@
                     <div class="form-submit"  style="padding-left: 110px">
                             <input type="submit" value="Log In" class="submit" id="submit" name="submit"/>
                     </div><br>
-                     {% if form.errors %}
-                        <h6 style="font-size: 15px; text-align:center; padding-left:45px; padding-bottom: 20px; color:red">Your username and password didn't match.</h6><br><br>
-                    {% endif %}
+
                      <div style="text-align: center; font-size: 15px">Not a member? <a href="{% url 'user_auth:register_user' %}">
                             Sign Up here.
                      </a></div>

@@ -68,40 +68,42 @@
                         <!-- Navbar -->
                         <div class="collapse navbar-collapse" id="worldNav">
                             <ul class="navbar-nav ml-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">News</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Sports</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href={% url 'sports:tournament_list' %}>Tournaments</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href={% url 'sports:coaching_centers_list' %}>Coaching Centers</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Sports stores</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Shopping</a>
-                                </li>
-                                {% if not user.is_authenticated %}
-                                    <li><a class="nav-link" href="{% url 'user_auth:login' %}">Login</a></li>
-                                    <li><a class="nav-link" href="{% url 'user_auth:register_user' %}">SignUp</a></li>
-                                {% else %}
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.username }}</a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a class="dropdown-item" href="{% url 'user_auth:user_profile' %}">My Profile</a>
-                                                <a class="dropdown-item" href="{% url 'user_auth:logout_user' %}">Logout</a>
-                                            {% endif %}
-                                        </div>
-                                    </li>
-                            </ul>
+                            <li class="nav-item {{ Home }}">
+                                <a class="nav-link " href={% url 'sports:homepage' %}>Home</a>
+                            </li>
+                            <li class="nav-item {{ News }}">
+                                <a class="nav-link " href={% url 'news:news_list' %}>News</a>
+                            </li>
+                            <li class="nav-item {{ Sports }}">
+                                <a class="nav-link" href="{% url "sports:sports-list" %}">Sports</a>
+                            </li>
+                            <li class="nav-item {{ Tournaments_active }}">
+                                <a class="nav-link" href={% url 'sports:tournament_list' %}>Tournaments</a>
+                            </li>
+                            <li class="nav-item {{ Coaching_Centers }}">
+                                <a class="nav-link" href={% url 'sports:coaching_centers_list' %}>Coaching Centers</a>
+                            </li>
+                            <li class="nav-item {{ Sports_Stores }}">
+                                <a class="nav-link" href={% url 'sports:sports_store' %}>Sports Stores</a>
+                            </li>
+                            <li class="nav-item {{ Shopping }}">
+                                <a class="nav-link" href={% url 'shopping:home' %}>Shopping</a>
+                            </li>
+                            {% if not user.is_authenticated %}
+                                <li class="nav-item {{ login_active }}"><a class="nav-link" href="{% url 'user_auth:login' %}">Login</a></li>
+                                <li class="nav-item {{ signup_active }}"><a class="nav-link" href="{% url 'user_auth:register_user' %}">SignUp</a></li>
+                            {% else %}
+                                <li class="nav-item dropdown {{ user_active }}">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">{{ user.username }}</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'user_auth:user_profile' %}">My Profile</a>
+                                <a class="dropdown-item" href="{% url 'user_auth:logout_user' %}">Logout</a>
+                            {% endif %}
+                            </div>
+                            </li>
+                        </ul>
                         </div>
                     </nav>
                 </div>

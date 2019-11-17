@@ -27,7 +27,7 @@ def login_page(request):
 
             return redirect('sports:homepage')
 
-    return render(request, 'user_auth/login.html', {'form': form})
+    return render(request, 'user_auth/login.html', {'form': form, 'login_active': 'active'})
 
 
 @login_required
@@ -64,12 +64,12 @@ def user_profile(request):
             news_form.save()
             msg = 'Profile Details successfully updated!'
             return render(request, 'user_auth/profile.html',
-                          {'user_form': user_form, 'news_form': news_form, 'msg': msg})
+                          {'user_form': user_form, 'news_form': news_form, 'msg': msg, 'user_active': 'active'})
 
     else:
         user_form = UpdateProfile(instance=user)
         news_form = UserProfile(instance=profile)
-        return render(request, 'user_auth/profile.html', {'user_form': user_form, 'news_form': news_form})
+        return render(request, 'user_auth/profile.html', {'user_form': user_form, 'news_form': news_form, 'user_active': 'active'})
 
 
 def register_user(request):
@@ -99,6 +99,6 @@ def register_user(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            return HttpResponse('Please confirm your email')
+            return render(request,'registration/confirm_email.html',{})
             # return redirect('user_auth:login')
-    return render(request, 'user_auth/register.html', {'form': form, 'form_profile': form_profile})
+    return render(request, 'user_auth/register.html', {'form': form, 'form_profile': form_profile, 'signup_active': 'active'})
