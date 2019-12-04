@@ -28,9 +28,11 @@
                                 </li>
 
                                 <li class="nav-item">
-                                        <a class="nav-link" id="tab2" data-toggle="tab" href="#world-tab-2" role="tab"
-                                           aria-controls="world-tab-2" aria-selected="false">Vidoes</a>
-                                    </li>
+
+                                    <a class="nav-link" id="tab2" data-toggle="tab" href="#world-tab-2" role="tab"
+                                       aria-controls="world-tab-2" aria-selected="false">Vidoes</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" id="myTabContent">
@@ -40,19 +42,19 @@
                                         <div class="col-md-12">
 
                                             <h5 style="font-family: Algerian">Description</h5><br>
-                                            <div style="border-style: inset;padding: 20px;">{{ object.description }}</div>
-                                               <br> <h5 style="font-family: Algerian">Objective</h5><br>
-                                            <div style="border-style: inset;padding: 20px">{{ object.objective}}</div>
-                                                <br><h5 style="font-family: Algerian">Equipment</h5><br>
-                                            <div style="border-style: inset;padding: 20px">{{ object.equipment }}</div>
-                                                <br><h5 style="font-family: Algerian">Scoring</h5><br>
-                                            <div style="border-style: inset;padding: 20px">{{ object.scoring }}</div>
-                                                <br><h5 style="font-family: Algerian">Winning-Crieteria</h5><br>
-                                            <div style="border-style: inset;padding: 20px">{{object.winning_criteria }}</div>
-                                                <br><h5 style="font-family: Algerian">Rules to play</h5><br>
-<div style="border-style: inset;padding: 20px">
-                                                {% for  line in object.rules.splitlines%}
-                                                    <font size="5">‣</font>&nbsp{{ line}}<br>
+                                            <div style="border: 1px solid #d9d9d9;padding: 20px;">{{ object.description }}</div>
+                                            <br> <h5 style="font-family: Algerian">Objective</h5><br>
+                                            <div style="border: 1px solid #d9d9d9;padding: 20px">{{ object.objective }}</div>
+                                            <br><h5 style="font-family: Algerian">Equipment</h5><br>
+                                            <div style="border: 1px solid #d9d9d9;padding: 20px">{{ object.equipment }}</div>
+                                            <br><h5 style="font-family: Algerian">Scoring</h5><br>
+                                            <div style="border: 1px solid #d9d9d9;padding: 20px">{{ object.scoring }}</div>
+                                            <br><h5 style="font-family: Algerian">Winning-Crieteria</h5><br>
+                                            <div style="border: 1px solid #d9d9d9;padding: 20px">{{ object.winning_criteria }}</div>
+                                            <br><h5 style="font-family: Algerian">Rules to play</h5><br>
+                                            <div style="border: 1px solid #d9d9d9;padding: 20px">
+                                                {% for  line in object.rules.splitlines %}
+                                                    <font size="5">‣</font>&nbsp{{ line }}<br>
                                                 {% endfor %}</div>
 
 
@@ -64,29 +66,38 @@
                                 <div class="tab-pane fade" id="world-tab-2" role="tabpanel"
                                      aria-labelledby="tab2">
                                     <div class="row">
-                                        <iframe width="960" height="540" src="https://www.youtube.com/embed?listype=playlist&list={{ object.playlist }}" allowfullscreen>
+                                        <iframe width="960" height="540"
+                                                src="https://www.youtube.com/embed?listype=playlist&list={{ object.playlist }}"
+                                                allowfullscreen>
+                                            <<<<<<< HEAD
                                         </iframe>
                                     </div>
                                 </div>
+
+                                =======
+                                </iframe>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- ========== Sidebar Area ========== -->
-                <div class="col-12 col-md-8 col-lg-2">
-                    <div class="post-sidebar-area mb-100">
-                        <!-- Widget Area -->
-                        <div id="sidebar" class="sidebar-widget-area">
-                            <h5 class="title">Sports</h5>
-                            <div class="widget-content">
-
-                            </div>
-                        </div>
+                        >>>>>>> d7a9fdb88db932adcc8c5ff6b9b83878db3f4e8d
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- ========== Sidebar Area ========== -->
+        <div class="col-12 col-md-8 col-lg-2">
+            <div class="post-sidebar-area mb-100">
+                <!-- Widget Area -->
+                <div id="sidebar" class="sidebar-widget-area">
+                    <h5 class="title">Sports</h5>
+                    <div class="widget-content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
     </div>
 
 {% endblock %}
