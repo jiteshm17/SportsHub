@@ -2,10 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.decorators import api_view
 from django.db.models import F
+from rest_framework.parsers import JSONParser
+
 from shopping.forms import writereview
-from .models import Category, Product, Review
+from .models import Category, Product, Review, DeliveryOptions
 from .serializers import ProductSerializer, CategorySerializer
 
 
@@ -97,3 +101,30 @@ def categoriesList(request):
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
         return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['POST'])
+def bidding(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        # t = Tournaments.objects.get(name=data['tournament'])
+        # data['tournament'] = t.pk
+
+        # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
+        p_id = data['product']
+        product = Product.objects.get(pk=p_id)
+        name = data['name']
+        name_id = data['name_id']
+        days = data['days']
+        cost = data['cost']
+        if DeliveryOptions.objects.filter(product=product, name_id=name_id).exists():
+            instance = DeliveryOptions.objects.get(product=product, name_id=name_id)
+            instance.cost = cost
+            instance.days = days
+            instance.name = name
+            instance.save()
+        else:
+            DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost)
+        return Response(status=status.HTTP_201_CREATED)
+        # print(serializer.errors)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
