@@ -99,6 +99,6 @@ def register_user(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            return HttpResponse('Please confirm your email')
+            return render(request,'registration/confirm_email.html',{})
             # return redirect('user_auth:login')
     return render(request, 'user_auth/register.html', {'form': form, 'form_profile': form_profile, 'signup_active': 'active'})

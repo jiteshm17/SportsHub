@@ -17,8 +17,11 @@
                     <div class="single-blog-post post-style-3 mt-50 wow fadeInUpBig" data-wow-delay="0.2s" style="padding: 0px">
                         <!-- Post Thumbnail -->
                         <div class="post-thumbnail">
-                            <img src="{{ sport.image.url }}" alt="" style="height:150px">
-
+                            {% if sport.image %}
+                            <img src="{{ sport.image.url }}" alt="">
+                            {% else %}
+                                <img src="{% static 'news/img/default_sport.jpg' %}" alt="">
+                            {% endif %}
                             <!-- Post Content -->
                             <div class="post-content d-flex align-items-center justify-content-between">
                                 <a href="{% url 'sports:sport-detail' sport.id %}" class="headline" style="color: white;">
