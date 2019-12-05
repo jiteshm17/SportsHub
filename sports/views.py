@@ -33,7 +33,7 @@ def homepage(request):
     else:
         d1_ts = time.mktime(last_update[0].last_update.timetuple())
         d2_ts = time.mktime(now.timetuple())
-        if (int(d2_ts - d1_ts) / 60) > 30:
+        if (int(d2_ts - d1_ts) / 60) > 100000:
             scrape_all_sports()
             LastNewsUpdate.objects.all().delete()
             LastNewsUpdate.objects.create(last_update=datetime.now())
