@@ -112,19 +112,23 @@ def bidding(request):
 
         # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
         p_id = data['product']
-        product = Product.objects.get(pk=p_id)
         name = data['name']
         name_id = data['name_id']
         days = data['days']
         cost = data['cost']
-        if DeliveryOptions.objects.filter(product=product, name_id=name_id).exists():
-            instance = DeliveryOptions.objects.get(product=product, name_id=name_id)
-            instance.cost = cost
-            instance.days = days
-            instance.name = name
-            instance.save()
-        else:
-            DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost)
-        return Response(status=status.HTTP_201_CREATED)
-        # print(serializer.errors)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        location = data['location']
+        try:
+            product = Product.objects.get(pk=p_id)
+            if DeliveryOptions.objects.filter(product=product, name_id=name_id, location=location).exists():
+                instance = DeliveryOptions.objects.get(product=product, name_id=name_id, location=location)
+                instance.cost = cost
+                instance.days = days
+                instance.name = name
+                instance.save()
+                return Response({'data update'}, status=status.HTTP_201_CREATED)
+            else:
+                DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost, location=location)
+                return Response({'created'}, status=status.HTTP_201_CREATED)
+        except:
+            pass
+        return Response({'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
