@@ -53,8 +53,8 @@ def scrape_all_sports():
             except:
                 pass
 
-            new_healine.category = sport
-            new_healine.save()
+            # new_healine.category = sport
+            # new_healine.save()
 
 
 def news_list(request):
