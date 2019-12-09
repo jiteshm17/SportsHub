@@ -142,19 +142,32 @@ def bidding(request):
         name_id = data['name_id']
         days = data['days']
         cost = data['cost']
-        location = data['location']
-        try:
-            product = Product.objects.get(pk=p_id)
-            if DeliveryOptions.objects.filter(product=product, name_id=name_id, location=location).exists():
-                instance = DeliveryOptions.objects.get(product=product, name_id=name_id, location=location)
-                instance.cost = cost
-                instance.days = days
-                instance.name = name
-                instance.save()
-                return Response({'data update'}, status=status.HTTP_201_CREATED)
-            else:
-                DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost, location=location)
-                return Response({'created'}, status=status.HTTP_201_CREATED)
-        except:
-            pass
-        return Response({'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+        pincode = data['pincode']
+        print(name,pincode)
+        if data['msg'] == 'delete':
+            try:
+                product = Product.objects.get(pk=p_id)
+                instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)
+                instance.delete()
+            except:
+                return Response({'data is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({'data deleted'}, status=status.HTTP_201_CREATED)
+
+        else:
+            try:
+                product = Product.objects.get(pk=p_id)
+                if DeliveryOptions.objects.filter(product=product, name_id=name_id, pincode=pincode).exists():
+                    instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)
+                    instance.cost = cost
+                    instance.days = days
+                    instance.name = name
+                    instance.save()
+                    return Response({'data update'}, status=status.HTTP_201_CREATED)
+                else:
+                    print('creating new row')
+                    DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost, pincode=pincode)
+                    return Response({'created'}, status=status.HTTP_201_CREATED)
+            except:
+                pass
+            return Response({'Bad request'}, status=status.HTTP_400_BAD_REQUEST)

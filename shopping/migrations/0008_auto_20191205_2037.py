@@ -16,8 +16,4 @@ class Migration(migrations.Migration):
             field=models.CharField(default='delhi', max_length=150),
             preserve_default=False,
         ),
-        migrations.AlterUniqueTogether(
-            name='deliveryoptions',
-            unique_together={('product', 'name_id', 'location')},
-        ),
     ]

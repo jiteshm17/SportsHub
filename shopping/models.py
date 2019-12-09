@@ -34,10 +34,10 @@ class DeliveryOptions(models.Model):
     name_id = models.IntegerField()
     days = models.PositiveIntegerField()
     cost = models.FloatField()
-    location = models.CharField(max_length=150)
+    pincode = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = ('product', 'name_id', 'location')
+        unique_together = ('name_id', 'product', 'pincode')
 
     def __str__(self):
         return self.name
