@@ -13,9 +13,6 @@
 
 <script>
             var map;
-
-
-
             function initMap() {
               if (navigator.geolocation) {
                 try {
@@ -41,35 +38,28 @@
                 setPos(myLocation);
               }
             }
-
             function setPos(myLocation) {
               map = new google.maps.Map(document.getElementById('map'), {
                 center: myLocation,
                 zoom: 10
               });
-
               var service = new google.maps.places.PlacesService(map);
               service.nearbySearch({
                 location: myLocation,
                 radius: 100000,
                 keyword: ['sportsstore']
               }, processResults);
-
             }
-
             function processResults(results, status, pagination) {
               if (status !== google.maps.places.PlacesServiceStatus.OK) {
                 return;
               } else {
                 createMarkers(results);
-
               }
             }
-
                        function createMarkers(places) {
               var bounds = new google.maps.LatLngBounds();
               var placesList = document.getElementById('places');
-
               for (var i = 0;i<places.length; i++) {
                 //var place=places[i]
                 var image = {
@@ -79,16 +69,8 @@
                   anchor: new google.maps.Point(17, 34),
                   scaledSize: new google.maps.Size(25, 25)
                 };
-
                 console.log(places[i])
-
-
-
-
-
-
               }
-
                 for (var i = 0;i<places.length; i++) {
                   var place=places[i]
                   var marker = new google.maps.Marker({
@@ -98,12 +80,7 @@
                   animation: google.maps.Animation.DROP,
                   position: places[i].geometry.location
                 });
-
-
                    var infowindow = new google.maps.InfoWindow()
-
-
-
                  google.maps.event.addListener(marker,'click', (function(place,marker,content,infowindow){
                           return function() {
                          infowindow.setContent('<div><strong>'+place.name+'<br>' + place.vicinity+ '</strong><br>');
@@ -115,8 +92,6 @@
                  //    infowindow.setContent(contentString);
                  //     infowindow.open(map, marker.position);
                  // });AIzaSyCfdKE1VbMIvt1v_eexPCIPgH88MK7AJLU   //AIzaSyCYYtq_ARXrOqlldi8_nzWUygIjx3Zg7mo                        //AIzaSyBBDDHXhrCzm5a2cemyN2QtIb8B11hvHQE//
-
-
                 bounds.extend(places[i].geometry.location);
               }
               map.fitBounds(bounds);
@@ -128,7 +103,6 @@
 <div id="map" style="height: 500px;
   margin: 10px auto;
   width: 100%;
-
   "></div>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApbt-_AkXKSDGfsGfEt5GdKJGkyKI_fGs&signed_in=true&libraries=places&callback=initMap" async defer></script>
 

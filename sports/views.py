@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from sports.models import Tournaments, CoachingCenters, TournamentJoin
 from news.models import LastNewsUpdate, HeadLine
-from sports.forms import FavoriteSports, TournamentRegistration, CoachingCenterRegistration, TournamentJoinForm
+from sports.forms import TournamentRegistration, CoachingCenterRegistration, TournamentJoinForm
 from django.urls import reverse
 from news.views import scrape_all_sports
 from datetime import datetime
@@ -33,7 +34,7 @@ def homepage(request):
     else:
         d1_ts = time.mktime(last_update[0].last_update.timetuple())
         d2_ts = time.mktime(now.timetuple())
-        if (int(d2_ts - d1_ts) / 60) > 30:
+        if (int(d2_ts - d1_ts) / 60) > 100000:
             scrape_all_sports()
             LastNewsUpdate.objects.all().delete()
             LastNewsUpdate.objects.create(last_update=datetime.now())
@@ -83,7 +84,8 @@ def tournament_list(request):
         join_tornamnets = Tournaments.objects.filter(pk__in=joined_pk)
         return render(request, 'sports/tournament_list.html',
                       {'Tournaments': tournaments,
-                       'User_Tournaments': user_tournaments, 'joined_tournaments': join_tornamnets, 'Tournaments_active': 'active'})
+                       'User_Tournaments': user_tournaments, 'joined_tournaments': join_tornamnets,
+                       'Tournaments_active': 'active'})
     return render(request, 'sports/tournament_list.html',
                   {'Tournaments': tournaments, 'Tournaments_active': 'active'})
 
@@ -106,7 +108,8 @@ def create_tournament(request):
                               {'form': tournamentForm, 'name': 'Tournament', 'error': 'Enter a  valid Start date'})
             if s_date > e_date:
                 return render(request, 'sports/create.html',
-                              {'form': tournamentForm, 'name': 'Tournament', 'error': 'End date should be greater that Start date'})
+                              {'form': tournamentForm, 'name': 'Tournament',
+                               'error': 'End date should be greater that Start date'})
             Tournaments.objects.create(name=name, description=des, start_date=s_date, end_date=e_date,
                                        location=location, user=user, image=img)
             return HttpResponseRedirect(reverse('sports:tournament_list'))
@@ -137,10 +140,12 @@ def edit_tournament(request, t_id):
             if form.is_valid():
                 if form.cleaned_data['start_date'] < datetime.date(datetime.now()):
                     return render(request, 'sports/edit.html', {'edit_form': form, 'name': 'Edit Tournament',
-                                                                'error': 'Enter a  valid Start date', 'Tournaments_active': 'active'})
+                                                                'error': 'Enter a  valid Start date',
+                                                                'Tournaments_active': 'active'})
                 if form.cleaned_data['start_date'] > form.cleaned_data['end_date']:
                     return render(request, 'sports/edit.html', {'edit_form': form, 'name': 'Edit Tournament',
-                                                                'error': 'End date should be greater that Start date', 'Tournaments_active': 'active'})
+                                                                'error': 'End date should be greater that Start date',
+                                                                'Tournaments_active': 'active'})
                 form.save()
                 return HttpResponseRedirect(reverse('sports:tournament_list'))
         form = TournamentRegistration(instance=instance)
@@ -158,7 +163,8 @@ def edit_coaching_center(request, c_id):
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse('sports:coaching_centers_list'))
-        return render(request, 'sports/edit.html', {'edit_form': form, 'name': 'Edit Coaching center', 'Coaching_Centers': 'active'})
+        return render(request, 'sports/edit.html',
+                      {'edit_form': form, 'name': 'Edit Coaching center', 'Coaching_Centers': 'active'})
 
 
 def coaching_centers_list(request):
@@ -167,7 +173,8 @@ def coaching_centers_list(request):
         user = User.objects.get(pk=request.user.pk)
         user_coaching_centers = CoachingCenters.objects.filter(user=user)
         return render(request, 'sports/coaching_centers_list.html',
-                      {'user_coaching_centers': user_coaching_centers, 'coaching_centers': coaching_centers, 'Coaching_Centers': 'active'})
+                      {'user_coaching_centers': user_coaching_centers, 'coaching_centers': coaching_centers,
+                       'Coaching_Centers': 'active'})
     return render(request, 'sports/coaching_centers_list.html',
                   {'coaching_centers': coaching_centers, 'Coaching_Centers': 'active'})
 
@@ -192,8 +199,8 @@ def create_coaching_center(request):
                                            user=user, mail=email, phone_num=contact, pincode=pincode, state=state,
                                            street_name=street, area=area, image=img)
             return HttpResponseRedirect(reverse('sports:coaching_centers_list'))
-    return render(request, 'sports/create.html', {'form': coaching_centersForm, 'name': 'Coaching Center', 'Coaching_Centers': 'active'})
-
+    return render(request, 'sports/create.html',
+                  {'form': coaching_centersForm, 'name': 'Coaching Center', 'Coaching_Centers': 'active'})
 
 
 @login_required
@@ -233,17 +240,30 @@ def tournamentsJoin(request):
             tournament.save()
             print('User Joined')
             print(data['tournament'])
-            t = Tournaments.objects.get(pk=data['tournament'])
-            t.no_of_joined += 1
-            t.save()
+            # t = Tournaments.objects.get(pk=data['tournament'])
+            # t.no_of_joined += 1
+            # t.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def join_Tournament(request, t_id):
+class TournamentDeregister(APIView):
 
+    def get_object(self, pk, u_name):
+        try:
+            return TournamentJoin.objects.get(pk=pk, name=u_name)
+        except TournamentJoin.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk, name):
+        snippet = self.get_object(pk, name)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def join_Tournament(request, t_id):
     initial = {'name': request.user.username, 'mail': request.user.email}
 
     joinForm = TournamentJoinForm(initial=initial)
@@ -267,7 +287,8 @@ def join_Tournament(request, t_id):
                     tourna.no_of_joined += 1
                     tourna.save()
                 return HttpResponseRedirect(reverse('sports:tournament_list'))
-        return render(request, 'sports/join_tournament.html', {'joinform': joinForm, 'tournament': tourna, 'Tournaments_active': 'active'})
+        return render(request, 'sports/join_tournament.html',
+                      {'joinform': joinForm, 'tournament': tourna, 'Tournaments_active': 'active'})
 
 
 def leave_Tournament(request, t_id):
@@ -285,4 +306,5 @@ def leave_Tournament(request, t_id):
 def participants_list(request, t_id):
     t = Tournaments.objects.get(pk=t_id)
     participants = TournamentJoin.objects.filter(tournament=t)
-    return render(request, 'sports/participants_list.html', {'participants': participants, 'Tournaments_active': 'active'})
+    return render(request, 'sports/participants_list.html',
+                  {'participants': participants, 'Tournaments_active': 'active'})

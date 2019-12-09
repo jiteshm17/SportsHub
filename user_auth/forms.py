@@ -1,7 +1,16 @@
 from django import forms
 from django.contrib.auth.models import User
-
+from .models import DeliveryLocation
 from user_auth.models import Profile
+
+
+class DeliveryLocationForm(forms.ModelForm):
+    class Meta:
+        model = DeliveryLocation
+        fields = ['pin_code']
+        labels = {
+            'pin_code': 'Pin Code'
+        }
 
 
 class RegisterForm(forms.ModelForm):

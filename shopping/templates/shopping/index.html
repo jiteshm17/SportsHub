@@ -9,7 +9,25 @@
         </div>
     </div>
     <!-- ********** Hero Area End ********** -->
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group form-input">
+                <span class="form-label">{{ field.label_tag }}</span><br>
+                {{ field }}
+            </div>
 
+            {% for error in field.errors %}
+                <p style="font-size: 15px; color: red">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+        {% if delivery_exists %}
+            <input type="submit" value="Update Location" class="submit" id="submit" name="submit"/>
+        {% else %}
+            <input type="submit" value="Set Location" class="submit" id="submit" name="submit"/>
+        {% endif %}
+
+    </form>
     <div class="main-content-wrapper section-padding-100">
         <div class="container">
             <div class="row justify-content-center">
