@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^review/(?P<categ>\w+)/(?P<product>\w+)/$', views.reviewtext, name='review'),
 
     path('product_list/', views.productList, name='product_list'),
+    path('delivery_bid/', views.bidding, name='delivery_bid'),
     path('categories_list/', views.categoriesList, name='categories_list'),
 ]

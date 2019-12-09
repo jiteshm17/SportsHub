@@ -7,7 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['prod_name', 'description', 'cost', 'brand', 'category','stock']
+        fields = ['pk', 'prod_name', 'description', 'cost', 'brand', 'category', 'stock', 'weight']
 
     def get_category(self, obj):
         return obj.category.cat_name
