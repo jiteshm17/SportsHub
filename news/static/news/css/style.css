@@ -79,7 +79,8 @@ a:hover, a:focus {
     background: url("../img/img.jpg");
     background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;}
+  background-size: cover;
+  }
 
   #slide2 {
     background: url("../img/photo.jpg");
