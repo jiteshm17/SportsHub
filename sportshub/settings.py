@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sportshub',
         'USER': 'root',
-        'PASSWORD': 'jitesh123',
+        'PASSWORD': 'mysqlroot',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -144,5 +144,5 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 # MEDIA_ROOT=os.path.join(BASE_DIR,'sportshub/media')
-PAYPAL_RECEIVER_EMAIL = 'manojmanyala@gmail.com'
+PAYPAL_RECEIVER_EMAIL = 'sb-uiien545215@business.example.com'
 PAYPAL_TEST = True
