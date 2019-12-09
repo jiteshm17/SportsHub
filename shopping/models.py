@@ -19,12 +19,28 @@ class Product(models.Model):
     prod_pic = models.FileField(upload_to='documents/', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    weight = models.PositiveIntegerField(default=2)
 
     def __str__(self):
         return self.prod_name
 
     def get_qty(self):
         return self.stock
+
+
+class DeliveryOptions(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    name_id = models.IntegerField()
+    days = models.PositiveIntegerField()
+    cost = models.FloatField()
+    pincode = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('name_id', 'product', 'pincode')
+
+    def __str__(self):
+        return self.name
 
 
 class Review(models.Model):

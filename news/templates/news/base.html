@@ -19,56 +19,7 @@
     <link rel="stylesheet" href="{% static 'news/css/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'news/css/themify-icons.css' %}">
 
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-
     <style>
-/*tanble counter*/
-    body
-{
-    counter-reset: Serial;           /* Set the Serial counter to 0 */
-}
-
-table
-{
-    border-collapse: separate;
-}
-
-tr td:first-child:before
-{
-  counter-increment: Serial;      /* Increment the Serial counter */
-  content: "Serial is: " counter(Serial); /* Display the counter */
-}
-
-.auto-index td:first-child:before
-{
-  counter-increment: Serial;      /* Increment the Serial counter */
-  content:counter(Serial); /* Display the counter */
-}
-
-
-
-
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
-
-
         a {
             -webkit-transition-duration: 500ms;
             transition-duration: 500ms;
@@ -90,7 +41,6 @@ tr:nth-child(even) {
             font-weight: 400;
             color: #0000ff;
         }
-
 
         a.link {
             color: white;
@@ -255,32 +205,14 @@ tr:nth-child(even) {
             }
         }
 
-      .affix {
-        top: 80px;
-          -webkit-transition: all .5s ease-in-out;
-        transition: all .5s ease-in-out;
-      }
-
-        .zoom {
-            transition: transform .2s;
-            margin: 0 auto;
-            padding: 8px;
-        }
-
-        .zoom:hover {
-          -ms-transform: scale(1.5); /* IE 9 */
-          -webkit-transform: scale(1.5); /* Safari 3-8 */
-          transform: scale(1.5);
-        }
-
+        {% block style %}
+        {% endblock %}
 
     </style>
 
-        {% block link %}
-        {% endblock %}
 </head>
 
-<body data-spy="scroll" data-offset="15">
+<body>
 <!-- Preloader Start -->
 <div id="preloader">
     <div class="preload-content">
