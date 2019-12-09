@@ -1,23 +1,49 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from django.db.models import F
 from rest_framework.parsers import JSONParser
 
 from shopping.forms import writereview
 from .models import Category, Product, Review, DeliveryOptions
 from .serializers import ProductSerializer, CategorySerializer
+from user_auth.forms import DeliveryLocationForm, DeliveryLocation
 
 
 def list_categories(request):
     categories = Category.objects.all()
     products = Product.objects.all()
+    form = DeliveryLocationForm()
+
+    if DeliveryLocation.objects.filter(user_name=request.user).exists():
+        delivery = DeliveryLocation.objects.get(user_name=request.user)
+        form = DeliveryLocationForm(instance=delivery)
+        if request.method == 'POST':
+            form = DeliveryLocationForm(request.POST, instance=delivery)
+            if form.is_valid():
+                form.save()
+                return redirect('shopping:home')
+        return render(request, 'shopping/index.html',
+                      {'categories': categories, 'products': products, 'Shopping': 'active', 'form': form,
+                       'delivery_exists': True})
+
+    if request.method == 'POST':
+        form = DeliveryLocationForm(request.POST)
+        if form.is_valid():
+            u = User.objects.get(username=request.user.username)
+            pin_code = form.cleaned_data['pin_code']
+            DeliveryLocation.objects.create(user_name=u, pin_code=pin_code)
+            return redirect('shopping:home')
+        else:
+            print('The form is not valid')
+            print(form.errors)
+
     return render(request, 'shopping/index.html',
-                  {'categories': categories, 'products': products, 'Shopping': 'active'})
+                  {'categories': categories, 'products': products, 'Shopping': 'active', 'form': form})
 
 
 def itemsview(request, pk):

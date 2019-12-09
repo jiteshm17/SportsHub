@@ -11,6 +11,19 @@ def phone_number_validation(ph_num):
         raise ValidationError('The phone number must be positive')
 
 
+def pin_code_validation(pincode):
+    if len(str(pincode)) != 6:
+        raise ValidationError('The pincode must have 6 digits only!')
+
+
+class DeliveryLocation(models.Model):
+    user_name = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    pin_code = models.IntegerField(validators=[pin_code_validation])
+
+    def __str__(self):
+        return self.user_name.username
+
+
 class Profile(models.Model):
     user_name = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     prod = models.ManyToManyField(Product, blank=True)
