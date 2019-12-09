@@ -4,15 +4,19 @@
 {% block content %}
 
     <div class="hero-area">
-        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 250px;">
+        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 270px;">
             <div class="hero-content-pages">Sports stores</div>
         </div>
-    </div>
-
+    </div><br>
+    <center><h4>Sports Stores in your locality</h4>
+        <p>Click on any shopping marker to popup its details. Click 'X' to minimise the popup. </p>
+    </center>
+    <div id="map" style="height: 500px;margin: 20px auto;width: 70%;"></div>
 
 
 <script>
             var map;
+
             function initMap() {
               if (navigator.geolocation) {
                 try {
@@ -57,7 +61,9 @@
                 createMarkers(results);
               }
             }
-                       function createMarkers(places) {
+
+            function createMarkers(places) {
+
               var bounds = new google.maps.LatLngBounds();
               var placesList = document.getElementById('places');
               for (var i = 0;i<places.length; i++) {
@@ -71,6 +77,7 @@
                 };
                 console.log(places[i])
               }
+
                 for (var i = 0;i<places.length; i++) {
                   var place=places[i]
                   var marker = new google.maps.Marker({
@@ -83,7 +90,7 @@
                    var infowindow = new google.maps.InfoWindow()
                  google.maps.event.addListener(marker,'click', (function(place,marker,content,infowindow){
                           return function() {
-                         infowindow.setContent('<div><strong>'+place.name+'<br>' + place.vicinity+ '</strong><br>');
+                         infowindow.setContent('<div style="width:300px"><h6>'+place.name+'</h6><strong>' + place.vicinity+ '</strong></div>');
                          infowindow.open(map,marker);
                       };
                   })
@@ -99,11 +106,11 @@
 </script>
 
 
-
 <div id="map" style="height: 500px;
   margin: 10px auto;
   width: 100%;
   "></div>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApbt-_AkXKSDGfsGfEt5GdKJGkyKI_fGs&signed_in=true&libraries=places&callback=initMap" async defer></script>
 
 <br><br>
