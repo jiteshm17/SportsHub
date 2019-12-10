@@ -80,7 +80,8 @@ def itemdetailview(request, ck, pk):
     user_pin_code = DeliveryLocation.objects.get(user_name=request.user)
 
     in_cart = False
-    if OrderItem.objects.filter(product=Product.objects.get(id=pk)).exists():
+
+    if OrderItem.objects.filter(product=Product.objects.get(id=pk), is_ordered=False).exists():
         print('Item in cart')
         in_cart = True
 
