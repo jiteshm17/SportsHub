@@ -150,7 +150,7 @@ def bidding(request):
         cost = data['cost']
         pincode = data['pincode']
         print(name,pincode)
-        if data['msg'] == 'delete':
+        if 'msg' in data and data['msg'] == 'delete':
             try:
                 product = Product.objects.get(pk=p_id)
                 instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)
