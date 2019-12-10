@@ -1,3 +1,6 @@
+import json
+
+import requests
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
@@ -29,10 +32,18 @@ def payment_done(request):
 
     order_items = order_to_purchase.items.all()
     pincode = DeliveryLocation.objects.get(user_name=request.user)
+    url = 'http://127.0.0.1:7000/bidding/ordered_log/'
+    profile = Profile.objects.get(user_name=request.user)
     for item in order_items:
         product = Product.objects.get(prod_name=item.product)
         product.stock -= item.qty
-        d = DeliveryOptions.objects.get(product=product, cost=item.delivery_cost, pincode=pincode)
+        if item.delivery_cost > 0:
+            d = DeliveryOptions.objects.get(product=product, cost=item.delivery_cost, pincode=pincode)
+            data = json.dumps(
+                {'name': d.name_id, 'product': d.product.id, 'pincode': pincode, 'prod_name': d.product.prod_name,
+                 'address': profile.address, 'phonenum': profile.phone_number,
+                 'customer_name': profile.user_name.username})
+            requests.post(url=url, data=data)
 
         product.save()
 
