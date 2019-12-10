@@ -59,31 +59,40 @@
                                                     <span style="color: green;size:23px">Only <b>{{ prod.stock }}</b> items left in stock. Hurry!!</span>
                                                 {% endif %}<br>
 
-                                                {% if prod.stock != 0 %}
-                                                    <form method="post" action="{% url 'cart:add_to_cart' prod.id %}">
-                                                    {% csrf_token %}
-
-                                                        <button class="btn world-btn" type="submit" id="add-cart">Add to Cart</button>
-
+                                                {% if in_cart == True %}
+                                                    <a href="{% url 'cart:order_summary' '0' %}">
+                                                        <button class="btn world-btn">Go to Cart</button>
+                                                    </a>
                                                 {% else %}
-
-                                                    <a href="{% url 'cart:add_to_cart' prod.id %}">
-                                                        <button class="btn world-btn"  disabled id="add-to-cart">Add to
+                                                    {% if prod.stock != 0 %}
+                                                        <form method="post"
+                                                              action="{% url 'cart:add_to_cart' prod.id %}">
+                                                        {% csrf_token %}
+                                                        <button class="btn world-btn" type="submit" id="add-cart">Add to
                                                             Cart
                                                         </button>
-                                                    </a>
+                                                    {% else %}
+
+                                                        <a href="{% url 'cart:add_to_cart' prod.id %}">
+                                                            <button class="btn world-btn" disabled id="add-to-cart">Add
+                                                                to
+                                                                Cart
+                                                            </button>
+                                                        </a>
+                                                    {% endif %}
                                                 {% endif %}
-                                                {% if delivery_exists %}
+                                                {% if delivery_exists == True and not in_cart %}
                                                     <h3>Choose your vendor</h3>
                                                     <select id="select-vendor" name="select-vendor">
-                                                        <option disabled selected value> -- select an option --</option>
+                                                        {#                                                        <option disabled selected value> -- select an option --</option>#}
                                                         {% for vendor in vendorsList %}
-                                                            <option value="{{ vendor.cost }}" name="{{ vendor.cost }}">{{ vendor.name }},{{ vendor.cost }}</option>
+                                                            <option value="{{ vendor.cost }}"
+                                                                    name="{{ vendor.cost }}">{{ vendor.name }},{{ vendor.cost }}</option>
                                                         {% endfor %}
                                                     </select>
-                                                    </form>
-                                                {% endif %}
 
+                                                {% endif %}
+                                                 </form>
                                                 <script>
                                                     $('#add-cart').click(function () {
                                                         {#e.preventDefault()#}

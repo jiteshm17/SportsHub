@@ -27,13 +27,11 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     date_ordered = models.DateTimeField(null=True)
 
-
-
     def get_cart_item(self):
         return self.items.all()
 
     def get_cart_total(self):
-        return sum([(item.product.cost * item.qty)+item.delivery_cost  for item in self.items.all()])
+        return sum([(item.product.cost * item.qty) + item.delivery_cost for item in self.items.all()])
 
 
 class Transaction(models.Model):

@@ -13,7 +13,11 @@ from cart.views import get_user_pending_order
 from django.contrib.auth.models import User
 from user_auth.models import Profile
 from shopping.models import Product
-from cart.models import Transaction
+from cart.models import Transaction, OrderItem
+from shopping.models import DeliveryOptions
+from user_auth.models import DeliveryLocation
+
+
 # Create your views here.
 
 @csrf_exempt
@@ -24,10 +28,12 @@ def payment_done(request):
     order_to_purchase.save()
 
     order_items = order_to_purchase.items.all()
-
+    pincode = DeliveryLocation.objects.get(user_name=request.user)
     for item in order_items:
         product = Product.objects.get(prod_name=item.product)
         product.stock -= item.qty
+        d = DeliveryOptions.objects.get(product=product, cost=item.delivery_cost, pincode=pincode)
+
         product.save()
 
     order_items.update(is_ordered=True, date_ordered=datetime.datetime.now())

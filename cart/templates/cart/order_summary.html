@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-<div class="hero-area">
+    <div class="hero-area">
         <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 300px;">
             <div class="hero-content-pages">Your Cart</div>
         </div>
@@ -19,8 +19,8 @@
                         <!-- Catagory Area -->
                         <div class="world-catagory-area">
                             <div class="row">
-                            <table class="table table-hover table-bordered text-center">
-                                <thead class="thead-dark">
+                                <table class="table table-hover table-bordered text-center">
+                                    <thead class="thead-dark">
                                     <tr class="text-center">
                                         <th>S.No</th>
                                         <th>Item</th>
@@ -30,72 +30,79 @@
                                         <th></th>
 
                                     </tr>
-                                </thead>
-
-                                {% for item in order.get_cart_item %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td><strong>
-                                            {{ item.product.prod_name }}
-                                            <span class="pull-right">
-                                            <a href="{% url 'cart:delete_from_cart' item.id %}" data-balloon="remove this item from cart"
-                                                class="text-danger" onclick="return confirm_delete();">
-                                                <button type="button" class="btn btn-outline-danger btn-sm">Remove</button>
+                                    </thead>
+                                    {% if msg %}
+                                        <h3>{{ msg }}</h3>
+                                    {% endif %}
+                                    {% for item in order.get_cart_item %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><strong>
+                                                {{ item.product.prod_name }}
+                                                <span class="pull-right">
+                                            <a href="{% url 'cart:delete_from_cart' item.id %}"
+                                               data-balloon="remove this item from cart"
+                                               class="text-danger" onclick="return confirm_delete();">
+                                                <button type="button"
+                                                        class="btn btn-outline-danger btn-sm">Remove</button>
                                             </a>
                                             </span>
-                                        </strong></td>
+                                            </strong></td>
 
-                                        <td>
-                                            <select id="{{ item.id }}" onchange="mult(this)">
-                                                <option value="{{ item.qty }}" selected>{{ item.qty }}</option>
-                                                {% for i in item|get_qty_number %}
-                                                    <option value={{ i|add:1 }}>{{ i|add:1 }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </td>
+                                            <td>
+                                                <select id="{{ item.id }}" onchange="mult(this)">
+                                                    <option value="{{ item.qty }}" selected>{{ item.qty }}</option>
+                                                    {% for i in item|get_qty_number %}
+                                                        <option value={{ i|add:1 }}>{{ i|add:1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
 
-                                        <td><strong>₹{{ item.product.cost }}</strong></td>
-                                        <td><strong>₹{{ item.delivery_cost }}</strong></td>
-                                        <td><strong>₹<span id="get_price{{ item.id }}">{% sum_multiply item.qty item.product.cost item.delivery_cost  %}</span></strong></td>
-                                    </tr>
+                                            <td><strong>₹{{ item.product.cost }}</strong></td>
+                                            <td><strong>₹{{ item.delivery_cost }}</strong></td>
+                                            <td><strong>₹<span
+                                                    id="get_price{{ item.id }}">{% sum_multiply item.qty item.product.cost item.delivery_cost %}</span></strong>
+                                            </td>
+                                        </tr>
 
-                                {% empty %}
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan=4> You have not added any items yet.</td>
+                                        </tr>
+                                    {% endfor %}
+
                                     <tr>
-                                        <td colspan=4> You have not added any items yet.</td>
-                                    </tr>
-                                {% endfor %}
+                                        {% if order.get_cart_total != None %}
+                                            <td colspan=5>
+                                                <strong class="pull-right">Order Total:</strong>
+                                            </td>
 
-                                <tr>
-                                    {% if order.get_cart_total != None %}
-                                        <td colspan=5>
-                                            <strong class="pull-right">Order Total:</strong>
-                                        </td>
-
-                                        <td colspan=3>
-                                            ₹<strong id="total">{{ order.get_cart_total }}</strong>
-                                        </td>
-                                    {% endif %}
-                                </tr>
-
-                                <tr>
-                                    <td colspan=2>
-                                        <a href="{% url 'shopping:home' %}" class="pull-left">
-                                            {% if order %}
-                                                <button class="btn world-btn">Continue Shopping</button>
-                                            {% else %}
-                                                <button class="btn world-btn">Add Items to Cart</button>
-                                            {% endif %}
-                                        </a>
-                                    </td>
-
-                                    <td colspan=4>
-                                        {% if order.get_cart_item %}
-                                            <a href="{% url 'cart:update' %}" class="pull-right">
-                                                <button class="btn world-btn">Proceed To Checkout</button></a>
+                                            <td colspan=3>
+                                                ₹<strong id="total">{{ order.get_cart_total }}</strong>
+                                            </td>
                                         {% endif %}
-                                    </td>
-                                </tr>
-                            </table>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan=2>
+                                            <a href="{% url 'shopping:home' %}" class="pull-left">
+                                                {% if order %}
+                                                    <button class="btn world-btn">Continue Shopping</button>
+                                                {% else %}
+                                                    <button class="btn world-btn">Add Items to Cart</button>
+                                                {% endif %}
+                                            </a>
+                                        </td>
+
+                                        <td colspan=4>
+                                            {% if order.get_cart_item %}
+                                                <a href="{% url 'cart:update' %}" class="pull-right">
+                                                    <button class="btn world-btn">Proceed To Checkout</button>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -119,8 +126,8 @@
             z = $this.value;
             {% for item in order.get_cart_item %}
                 y = parseInt(document.getElementById("{{ item.id }}").value);
-                x = x + {{item.product.cost}}*y;
-                document.getElementById("get_price{{ item.id }}").innerHTML = ({{item.product.cost}}*y);
+                x = x + {{item.product.cost}} * y;
+                document.getElementById("get_price{{ item.id }}").innerHTML = ({{item.product.cost}} * y);
                 {#$(#{{ item.id }}).html({{item.product.cost}}*y);#}
             {% endfor %}
             document.getElementById("total").innerHTML = x;
