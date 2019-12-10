@@ -27,3 +27,13 @@ def get_qty_number(item):
 @register.simple_tag()
 def multiply(qty, unit_price, *args, **kwargs):
     return qty * unit_price
+
+
+@register.simple_tag()
+def sum(cost, delivery, *args, **kwargs):
+    return cost + delivery
+
+
+@register.simple_tag()
+def sum_multiply(qty, unit_price, delivery, *args, **kwargs):
+    return (qty * unit_price) + delivery

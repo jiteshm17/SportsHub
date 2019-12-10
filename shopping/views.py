@@ -50,13 +50,6 @@ def itemsview(request, pk):
     categories = Category.objects.all()
     cat = Category.objects.get(id=pk)
     current_order_products = []
-    # if request.user.is_authenticated:
-    #     filtered_orders = Order.objects.filter(owner=request.user.cus, is_ordered=False)
-    #     if filtered_orders.exists():
-    #         user_order = filtered_orders[0]
-    #         user_order_items = user_order.items.all()
-    #         current_order_products = [product.product for product in user_order_items]
-
     context = {
         'categories': categories,
         'cat': cat,
@@ -69,10 +62,11 @@ def itemsview(request, pk):
 
 def itemdetailview(request, pk, ck):
     categories = Category.objects.all()
-    cat = Category.objects.get(id=pk)
-    prod = Product.objects.get(id=ck)
-    products = Product.objects.filter(category=cat)
+    cat = Category.objects.get(id=ck)
+    prod = Product.objects.get(id=pk)
     current_order_products = []
+    delivery_exists = False
+    p = Product.objects.get(pk=pk)
 
     if request.method == 'POST':
         form = writereview(request.POST)
@@ -85,12 +79,24 @@ def itemdetailview(request, pk, ck):
             return redirect(reverse('shopping:specificitem', args=(pk, ck,)))
     else:
         form = writereview()
+    if DeliveryOptions.objects.filter(product=p).exists():
+        vendorsList = DeliveryOptions.objects.filter(product=p)
+        delivery_exists = True
+        return render(request, 'shopping/itemdetail.html', {'form': form,
+                                                            'categories': categories,
+                                                            'cat': cat,
+                                                            'prod': prod,
+                                                            'current_order_products': current_order_products,
+                                                            'Shopping': 'active',
+                                                            'delivery_exists': delivery_exists,
+                                                            'vendorsList': vendorsList})
     return render(request, 'shopping/itemdetail.html', {'form': form,
                                                         'categories': categories,
                                                         'cat': cat,
                                                         'prod': prod,
                                                         'current_order_products': current_order_products,
-                                                        'Shopping': 'active'})
+                                                        'Shopping': 'active',
+                                                        'delivery_exists': delivery_exists})
 
 
 @login_required
@@ -144,7 +150,7 @@ def bidding(request):
         cost = data['cost']
         pincode = data['pincode']
         print(name,pincode)
-        if data['msg'] == 'delete':
+        if 'msg' in data and data['msg'] == 'delete':
             try:
                 product = Product.objects.get(pk=p_id)
                 instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)

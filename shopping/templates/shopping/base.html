@@ -65,7 +65,7 @@
     {#			</form>#}
     {#		</div>#}
     <div class="product_list_header">
-        <form action="{% url 'cart:order_summary' %}" method="post" class="last">
+        <form action="{% url 'cart:order_summary','0' %}" method="post" class="last">
             {% csrf_token %}
             <fieldset>
                 {% if user.is_authenticated %}

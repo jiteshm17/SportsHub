@@ -26,6 +26,7 @@
                                         <th>Item</th>
                                         <th>Quantity</th>
                                         <th>Price/per</th>
+                                        <th>Delivery Charges</th>
                                         <th></th>
 
                                     </tr>
@@ -54,7 +55,8 @@
                                         </td>
 
                                         <td><strong>₹{{ item.product.cost }}</strong></td>
-                                        <td><strong>₹<span id="get_price{{ item.id }}">{% multiply item.product.cost item.qty %}</span></strong></td>
+                                        <td><strong>₹{{ item.delivery_cost }}</strong></td>
+                                        <td><strong>₹<span id="get_price{{ item.id }}">{% sum_multiply item.qty item.product.cost item.delivery_cost  %}</span></strong></td>
                                     </tr>
 
                                 {% empty %}
@@ -65,11 +67,11 @@
 
                                 <tr>
                                     {% if order.get_cart_total != None %}
-                                        <td colspan=4>
+                                        <td colspan=5>
                                             <strong class="pull-right">Order Total:</strong>
                                         </td>
 
-                                        <td colspan=2>
+                                        <td colspan=3>
                                             ₹<strong id="total">{{ order.get_cart_total }}</strong>
                                         </td>
                                     {% endif %}
@@ -86,7 +88,7 @@
                                         </a>
                                     </td>
 
-                                    <td colspan=3>
+                                    <td colspan=4>
                                         {% if order.get_cart_item %}
                                             <a href="{% url 'cart:update' %}" class="pull-right">
                                                 <button class="btn world-btn">Proceed To Checkout</button></a>
