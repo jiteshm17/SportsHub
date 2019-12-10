@@ -55,8 +55,6 @@ def get_user_pending_order(request):
 def add_to_cart(request, prod_id):
     product = Product.objects.get(id=prod_id)
 
-
-
     # print(product.stock)
     # shippingcost = request.POST['ShippingCost']
     # shippingcost = int(shippingcost)
@@ -82,16 +80,17 @@ def add_to_cart(request, prod_id):
         ref_code = generate_order_id()
         print(ref_code)
         order_item, status = OrderItem.objects.get_or_create(product=product, ref_code=ref_code)
-        if request.method == 'POST':
+        if request.method == 'POST' and 'select-vendor' in request.POST:
             cost = request.POST['select-vendor']
             order_item.delivery_cost = cost
             order_item.save()
+        order_item.save()
         user_order.items.add(order_item)
         user_order.ref_code = ref_code
         user_order.save()
     else:
         order_item, status = OrderItem.objects.get_or_create(product=product, ref_code=user_order.ref_code)
-        if request.method == 'POST':
+        if request.method == 'POST' and 'select-vendor' in request.POST:
             cost = request.POST['select-vendor']
             order_item.delivery_cost = cost
             order_item.save()
@@ -103,7 +102,7 @@ def add_to_cart(request, prod_id):
     #     return redirect(nextto)
 
     # return reverse(redirect('cart:order_summary'), args=(shippingcost,))
-    if request.method == 'POST':
+    if request.method == 'POST' and 'select-vendor' in request.POST:
         cost = request.POST['select-vendor']
         cost = str(cost)
         return redirect(reverse('cart:order_summary', args=(cost,)))
@@ -115,17 +114,20 @@ def delete_from_cart(request, item_id):
     item_to_delete = OrderItem.objects.filter(pk=item_id)
     if item_to_delete.exists():
         item_to_delete[0].delete()
-    return redirect(reverse('cart:order_summary',args=('0',)))
+    return redirect(reverse('cart:order_summary', args=('0',)))
 
 
 @login_required
-def order_details(request,cost):
+def order_details(request, cost):
     existing_order = get_user_pending_order(request)
 
     context = {
         'order': existing_order,
         'Shopping': 'active'
     }
+    if request.session.get('msg'):
+        context['msg'] = request.session.get('msg')
+        request.session['msg'] = None
     return render(request, 'cart/order_summary.html', context)
 
 

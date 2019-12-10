@@ -7,11 +7,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
-
+from cart.models import OrderItem, Order
 from shopping.forms import writereview
 from .models import Category, Product, Review, DeliveryOptions
 from .serializers import ProductSerializer, CategorySerializer
-from user_auth.forms import DeliveryLocationForm, DeliveryLocation
+from user_auth.forms import DeliveryLocationForm
+from user_auth.models import DeliveryLocation, Profile
 
 
 def list_categories(request):
@@ -25,7 +26,13 @@ def list_categories(request):
         if request.method == 'POST':
             form = DeliveryLocationForm(request.POST, instance=delivery)
             if form.is_valid():
-                form.save()
+                ord = Order.objects.filter(owner=Profile.objects.get(user_name=request.user),is_ordered=False)
+                if ord.exists() and ord[0].items.exists():
+                    msg = "Please checkout before updating your pincode"
+                    request.session['msg'] = msg
+                    return redirect(reverse('cart:order_summary', args=('0',)))
+                else:
+                    form.save()
                 return redirect('shopping:home')
         return render(request, 'shopping/index.html',
                       {'categories': categories, 'products': products, 'Shopping': 'active', 'form': form,
@@ -60,13 +67,19 @@ def itemsview(request, pk):
     return render(request, "shopping/items.html", context)
 
 
+@login_required
 def itemdetailview(request, pk, ck):
     categories = Category.objects.all()
-    cat = Category.objects.get(id=ck)
-    prod = Product.objects.get(id=pk)
+    cat = Category.objects.get(id=pk)
+    prod = Product.objects.get(id=ck)
     current_order_products = []
     delivery_exists = False
     p = Product.objects.get(pk=pk)
+    user_pin_code = DeliveryLocation.objects.get(user_name=request.user)
+
+    in_cart = False
+    if OrderItem.objects.filter(product=pk).exists():
+        in_cart = True
 
     if request.method == 'POST':
         form = writereview(request.POST)
@@ -79,8 +92,9 @@ def itemdetailview(request, pk, ck):
             return redirect(reverse('shopping:specificitem', args=(pk, ck,)))
     else:
         form = writereview()
-    if DeliveryOptions.objects.filter(product=p).exists():
-        vendorsList = DeliveryOptions.objects.filter(product=p)
+    if DeliveryOptions.objects.filter(product=p, pincode=user_pin_code.pin_code).exists():
+        vendorsList = DeliveryOptions.objects.filter(product=p, pincode=user_pin_code.pin_code)
+        print('The number of vendors are', len(vendorsList))
         delivery_exists = True
         return render(request, 'shopping/itemdetail.html', {'form': form,
                                                             'categories': categories,
@@ -89,7 +103,8 @@ def itemdetailview(request, pk, ck):
                                                             'current_order_products': current_order_products,
                                                             'Shopping': 'active',
                                                             'delivery_exists': delivery_exists,
-                                                            'vendorsList': vendorsList})
+                                                            'vendorsList': vendorsList,
+                                                            'in_cart': in_cart})
     return render(request, 'shopping/itemdetail.html', {'form': form,
                                                         'categories': categories,
                                                         'cat': cat,
@@ -149,7 +164,7 @@ def bidding(request):
         days = data['days']
         cost = data['cost']
         pincode = data['pincode']
-        print(name,pincode)
+        print(name, pincode)
         if 'msg' in data and data['msg'] == 'delete':
             try:
                 product = Product.objects.get(pk=p_id)
@@ -172,7 +187,8 @@ def bidding(request):
                     return Response({'data update'}, status=status.HTTP_201_CREATED)
                 else:
                     print('creating new row')
-                    DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost, pincode=pincode)
+                    DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost,
+                                                   pincode=pincode)
                     return Response({'created'}, status=status.HTTP_201_CREATED)
             except:
                 pass
