@@ -69,7 +69,8 @@ def user_profile(request):
     else:
         user_form = UpdateProfile(instance=user)
         news_form = UserProfile(instance=profile)
-        return render(request, 'user_auth/profile.html', {'user_form': user_form, 'news_form': news_form, 'user_active': 'active'})
+        return render(request, 'user_auth/profile.html',
+                      {'user_form': user_form, 'news_form': news_form, 'user_active': 'active'})
 
 
 def register_user(request):
@@ -86,19 +87,20 @@ def register_user(request):
             user_profile = Profile.objects.create(user_name=user, location=form_profile.cleaned_data['location'])
             user_profile.save()
 
-            current_site = get_current_site(request)
-            mail_subject = 'Activate your account.'
-            message = render_to_string('user_auth/activate_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            to_email = form.cleaned_data.get('email')
-            email = EmailMessage(
-                mail_subject, message, to=[to_email]
-            )
-            email.send()
-            return render(request,'registration/confirm_email.html',{})
-            # return redirect('user_auth:login')
-    return render(request, 'user_auth/register.html', {'form': form, 'form_profile': form_profile, 'signup_active': 'active'})
+            # current_site = get_current_site(request)
+            # mail_subject = 'Activate your account.'
+            # message = render_to_string('user_auth/activate_email.html', {
+            #     'user': user,
+            #     'domain': current_site.domain,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #     'token': account_activation_token.make_token(user),
+            # })
+            # to_email = form.cleaned_data.get('email')
+            # email = EmailMessage(
+            #     mail_subject, message, to=[to_email]
+            # )
+            # email.send()
+            # return render(request,'registration/confirm_email.html',{})
+            return redirect('user_auth:login')
+    return render(request, 'user_auth/register.html',
+                  {'form': form, 'form_profile': form_profile, 'signup_active': 'active'})

@@ -64,52 +64,26 @@
                                                         <button class="btn world-btn">Go to Cart</button>
                                                     </a>
                                                 {% else %}
-                                                    {% if prod.stock != 0 %}
-                                                        <form method="post"
-                                                              action="{% url 'cart:add_to_cart' prod.id %}">
-                                                        {% csrf_token %}
-                                                        <button class="btn world-btn" type="submit" id="add-cart">Add to
-                                                            Cart
-                                                        </button>
-                                                    {% else %}
+                                                    <form method="post" action="{% url 'cart:add_to_cart' prod.id %}">
+                                                        {% if prod.stock != 0 %}
+                                                            {% csrf_token %}
+                                                                <button class="btn world-btn" type="submit" id="add-cart">Add to Cart</button>
+                                                            {% else %}
+                                                                <a href="{% url 'cart:add_to_cart' prod.id %}">
+                                                                    <button class="btn world-btn" disabled id="add-to-cart">Add to Cart</button>
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endif %}
 
-                                                        <a href="{% url 'cart:add_to_cart' prod.id %}">
-                                                            <button class="btn world-btn" disabled id="add-to-cart">Add
-                                                                to
-                                                                Cart
-                                                            </button>
-                                                        </a>
-                                                    {% endif %}
-                                                {% endif %}
-                                                {% if delivery_exists == True and not in_cart %}
-                                                    <h3>Choose your vendor</h3>
-                                                    <select id="select-vendor" name="select-vendor">
-                                                        {#                                                        <option disabled selected value> -- select an option --</option>#}
-                                                        {% for vendor in vendorsList %}
-                                                            <option value="{{ vendor.cost }}"
-                                                                    name="{{ vendor.cost }}">{{ vendor.name }},{{ vendor.cost }}</option>
-                                                        {% endfor %}
-                                                    </select>
-
-                                                {% endif %}
-                                                 </form>
-                                                <script>
-                                                    $('#add-cart').click(function () {
-                                                        {#e.preventDefault()#}
-                                                        console.log('Clicked the button');
-                                                        var ShippingCost = parseFloat(document.getElementById('select-vendor').value);
-                                                        var vendorCost = {'ShippingCost': ShippingCost};
-                                                        console.log(vendorCost);
-                                                        $.ajax({
-                                                            url: '{% url 'cart:add_to_cart'  prod.id %}',
-                                                            method: 'GET',
-                                                            data: vendorCost,
-                                                            success: function () {
-                                                                console.log('Data is succesfully sent')
-                                                            }
-                                                        })
-                                                    })
-                                                </script>
+                                                        {% if delivery_exists == True and in_cart == False %}
+                                                            <select id="select-vendor" name="select-vendor" required>
+                                                                {% for vendor in vendorsList %}
+                                                                    <option value="{{ vendor.cost }}"
+                                                                            name="{{ vendor.cost }}">{{ vendor.name }},{{ vendor.cost }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        {% endif %}
+                                                    </form>
 
                                             </div>
                                         </div>

@@ -26,7 +26,7 @@ def list_categories(request):
         if request.method == 'POST':
             form = DeliveryLocationForm(request.POST, instance=delivery)
             if form.is_valid():
-                ord = Order.objects.filter(owner=Profile.objects.get(user_name=request.user),is_ordered=False)
+                ord = Order.objects.filter(owner=Profile.objects.get(user_name=request.user), is_ordered=False)
                 if ord.exists() and ord[0].items.exists():
                     msg = "Please checkout before updating your pincode"
                     request.session['msg'] = msg
@@ -68,17 +68,21 @@ def itemsview(request, pk):
 
 
 @login_required
-def itemdetailview(request, pk, ck):
+def itemdetailview(request, ck, pk):
+    print('The product key is', pk)
+    print('The category key is', ck)
     categories = Category.objects.all()
-    cat = Category.objects.get(id=pk)
-    prod = Product.objects.get(id=ck)
+    cat = Category.objects.get(id=ck)
+    prod = Product.objects.get(id=pk)
     current_order_products = []
     delivery_exists = False
     p = Product.objects.get(pk=pk)
     user_pin_code = DeliveryLocation.objects.get(user_name=request.user)
 
     in_cart = False
-    if OrderItem.objects.filter(product=pk).exists():
+
+    if OrderItem.objects.filter(product=Product.objects.get(id=pk), is_ordered=False).exists():
+        print('Item in cart')
         in_cart = True
 
     if request.method == 'POST':
@@ -89,7 +93,7 @@ def itemdetailview(request, pk, ck):
             review1 = Review.objects.create(category=cat, product=prod, customer=request.user, content=content,
                                             rating=rating)
             review1.save()
-            return redirect(reverse('shopping:specificitem', args=(pk, ck,)))
+            return redirect(reverse('shopping:specificitem', args=(ck, pk,)))
     else:
         form = writereview()
     if DeliveryOptions.objects.filter(product=p, pincode=user_pin_code.pin_code).exists():
@@ -111,6 +115,7 @@ def itemdetailview(request, pk, ck):
                                                         'prod': prod,
                                                         'current_order_products': current_order_products,
                                                         'Shopping': 'active',
+                                                        'in_cart': in_cart,
                                                         'delivery_exists': delivery_exists})
 
 
@@ -170,9 +175,10 @@ def bidding(request):
                 product = Product.objects.get(pk=p_id)
                 instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)
                 instance.delete()
+                print('deleted')
             except:
+                print('found error')
                 return Response({'data is not valid'}, status=status.HTTP_400_BAD_REQUEST)
-
             return Response({'data deleted'}, status=status.HTTP_201_CREATED)
 
         else:
