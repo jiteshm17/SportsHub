@@ -11,6 +11,7 @@ class OrderItem(models.Model):
     date_ordered = models.DateTimeField(null=True)
     qty = models.IntegerField(null=True, default=1)
     ref_code = models.CharField(max_length=20)
+    delivery_cost = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.product.prod_name
@@ -32,7 +33,7 @@ class Order(models.Model):
         return self.items.all()
 
     def get_cart_total(self):
-        return sum([item.product.cost * item.qty for item in self.items.all()])
+        return sum([(item.product.cost * item.qty)+item.delivery_cost  for item in self.items.all()])
 
 
 class Transaction(models.Model):

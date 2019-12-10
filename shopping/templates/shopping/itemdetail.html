@@ -21,17 +21,20 @@
                                 <li class="title">Shopping</li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#world-tab-1" role="tab" aria-controls="world-tab-1" aria-selected="true"></a>
+                                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#world-tab-1"
+                                       role="tab" aria-controls="world-tab-1" aria-selected="true"></a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab2" href="{% url 'cart:order_summary' %}" role="tab">View Your Cart <img src="https://img.icons8.com/ios/20/000000/shopping-cart.png"></a>
+                                    <a class="nav-link" id="tab2" href="{% url 'cart:order_summary' '0' %}" role="tab">View
+                                        Your Cart <img src="https://img.icons8.com/ios/20/000000/shopping-cart.png"></a>
                                 </li>
                             </ul>
 
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel" aria-labelledby="tab1">
-                                    <div class = "row">
+                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel"
+                                     aria-labelledby="tab1">
+                                    <div class="row">
                                         <div style="display:inline-block;float:left;width:40%">
                                             {% if prod.prod_pic %}
                                                 <img src="{{ prod.prod_pic.url }}" width="300" height="300">
@@ -57,14 +60,48 @@
                                                 {% endif %}<br>
 
                                                 {% if prod.stock != 0 %}
+                                                    <form method="post" action="{% url 'cart:add_to_cart' prod.id %}">
+                                                    {% csrf_token %}
+
+                                                        <button class="btn world-btn" type="submit" id="add-cart">Add to Cart</button>
+
+                                                {% else %}
+
                                                     <a href="{% url 'cart:add_to_cart' prod.id %}">
-                                                        <button class="btn world-btn">Add to Cart</button>
-                                                    </a>
-                                                 {% else %}
-                                                    <a href="{% url 'cart:add_to_cart' prod.id %}">
-                                                        <button class="btn world-btn" disabled>Add to Cart</button>
+                                                        <button class="btn world-btn"  disabled id="add-to-cart">Add to
+                                                            Cart
+                                                        </button>
                                                     </a>
                                                 {% endif %}
+                                                {% if delivery_exists %}
+                                                    <h3>Choose your vendor</h3>
+                                                    <select id="select-vendor" name="select-vendor">
+                                                        <option disabled selected value> -- select an option --</option>
+                                                        {% for vendor in vendorsList %}
+                                                            <option value="{{ vendor.cost }}" name="{{ vendor.cost }}">{{ vendor.name }},{{ vendor.cost }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    </form>
+                                                {% endif %}
+
+                                                <script>
+                                                    $('#add-cart').click(function () {
+                                                        {#e.preventDefault()#}
+                                                        console.log('Clicked the button');
+                                                        var ShippingCost = parseFloat(document.getElementById('select-vendor').value);
+                                                        var vendorCost = {'ShippingCost': ShippingCost};
+                                                        console.log(vendorCost);
+                                                        $.ajax({
+                                                            url: '{% url 'cart:add_to_cart'  prod.id %}',
+                                                            method: 'GET',
+                                                            data: vendorCost,
+                                                            success: function () {
+                                                                console.log('Data is succesfully sent')
+                                                            }
+                                                        })
+                                                    })
+                                                </script>
+
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +113,8 @@
                                                 <div name="review">
                                                     {% for review in prod.review_set.all %}
                                                         <p>{{ review.content }}</p>
-                                                        <footer class="blockquote-footer">by <cite>{{ review.customer }}</cite></footer>
+                                                        <footer class="blockquote-footer">by
+                                                            <cite>{{ review.customer }}</cite></footer>
                                                         <br>
                                                     {% endfor %}
                                                 </div>

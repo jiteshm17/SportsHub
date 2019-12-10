@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from cart.models import OrderItem, Order, Transaction
 from shopping.models import Product
 from user_auth.forms import Contact_Form
@@ -49,12 +51,17 @@ def get_user_pending_order(request):
 
 
 @login_required
+@csrf_exempt
 def add_to_cart(request, prod_id):
     product = Product.objects.get(id=prod_id)
+
+
+
     # print(product.stock)
-
+    # shippingcost = request.POST['ShippingCost']
+    # shippingcost = int(shippingcost)
+    # print('Shipping cost is', shippingcost)
     # return HttpResponse('hello')
-
     # if request.GET:
     #     vendorid = request.GET['vendorid']
     #     print(vendorid)
@@ -65,21 +72,29 @@ def add_to_cart(request, prod_id):
 
     u = User.objects.get(pk=request.user.pk)
     user_profile = Profile.objects.get(user_name=u)
-    print(user_profile)
+    # print(user_profile)
 
     user_order, status = Order.objects.get_or_create(owner=user_profile, is_ordered=False)
 
-    print(user_order, status)
+    # print(user_order, status)
 
     if status:
         ref_code = generate_order_id()
         print(ref_code)
         order_item, status = OrderItem.objects.get_or_create(product=product, ref_code=ref_code)
+        if request.method == 'POST':
+            cost = request.POST['select-vendor']
+            order_item.delivery_cost = cost
+            order_item.save()
         user_order.items.add(order_item)
         user_order.ref_code = ref_code
         user_order.save()
     else:
         order_item, status = OrderItem.objects.get_or_create(product=product, ref_code=user_order.ref_code)
+        if request.method == 'POST':
+            cost = request.POST['select-vendor']
+            order_item.delivery_cost = cost
+            order_item.save()
         user_order.items.add(order_item)
         user_order.save()
 
@@ -87,7 +102,12 @@ def add_to_cart(request, prod_id):
     #     nextto = request.GET["nextto"]
     #     return redirect(nextto)
 
-    return redirect('cart:order_summary')
+    # return reverse(redirect('cart:order_summary'), args=(shippingcost,))
+    if request.method == 'POST':
+        cost = request.POST['select-vendor']
+        cost = str(cost)
+        return redirect(reverse('cart:order_summary', args=(cost,)))
+    return redirect(reverse('cart:order_summary', args=('0',)))
 
 
 @login_required
@@ -95,11 +115,11 @@ def delete_from_cart(request, item_id):
     item_to_delete = OrderItem.objects.filter(pk=item_id)
     if item_to_delete.exists():
         item_to_delete[0].delete()
-    return redirect(reverse('cart:order_summary'))
+    return redirect(reverse('cart:order_summary',args=('0',)))
 
 
 @login_required
-def order_details(request, **kwargs):
+def order_details(request,cost):
     existing_order = get_user_pending_order(request)
 
     context = {
