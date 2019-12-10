@@ -12,8 +12,8 @@ class Sport_Info(models.Model):
     winning_criteria = models.TextField(max_length=1000, blank=True, null=True)
     rules = models.TextField(max_length=10000, blank=True, null=True)
     image = models.ImageField(upload_to='static/sports/sport-image', blank=True)
-    playlist=models.CharField(max_length=100,blank=True,null=True)
-    icon = models.CharField(max_length=100,blank=True,null=True)
+    playlist = models.CharField(max_length=100, blank=True, null=True)
+    icon = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.name
