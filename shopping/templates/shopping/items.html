@@ -22,53 +22,57 @@
                                 <li class="title">Shopping</li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#world-tab-1" role="tab" aria-controls="world-tab-1" aria-selected="true"></a>
+                                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#world-tab-1"
+                                       role="tab" aria-controls="world-tab-1" aria-selected="true"></a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" id="tab2" href="{% url 'cart:order_summary''0' %}" role="tab">View Your Cart <img src="https://img.icons8.com/ios/20/000000/shopping-cart.png"></a>
+                                    <a class="nav-link" id="tab2" href="{% url 'cart:order_summary' '0' %}" role="tab">View
+                                        Your Cart <img src="https://img.icons8.com/ios/20/000000/shopping-cart.png"></a>
                                 </li>
                             </ul>
 
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel" aria-labelledby="tab1">
-                                    <div class = "row">
-                                    {% for prod in cat.product_set.all %}
-                                        <div class="col-md-3">
-                                            <div class="product-grid6">
-                                                {% if prod.prod_pic %}
-                                                    <div class="product-image6"><img src="{{ prod.prod_pic.url }}"></div>
-                                                {% endif %}
-                                                <div class="product-content">
-                                                    <h3 class="title">{{ prod.prod_name }}</h3>
-                                                    <div class="price">₹{{ prod.cost }}
+                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel"
+                                     aria-labelledby="tab1">
+                                    <div class="row">
+                                        {% for prod in cat.product_set.all %}
+                                            <div class="col-md-3">
+                                                <div class="product-grid6">
+                                                    {% if prod.prod_pic %}
+                                                        <div class="product-image6"><img src="{{ prod.prod_pic.url }}">
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="product-content">
+                                                        <h3 class="title">{{ prod.prod_name }}</h3>
+                                                        <div class="price">₹{{ prod.cost }}
+                                                        </div>
                                                     </div>
+                                                    <ul class="social">
+                                                        <li><a href="{% url 'shopping:specificitem' cat.id prod.id %}"
+                                                               data-tip="View Product"><i
+                                                                class="fa fa-search"></i></a></li>
+                                                    </ul>
+                                                    {#                                                                    <figcaption class="info-wrap">#}
+                                                    {#                                                				        <h4 class="title">{{prod.prod_name}}</h4>#}
+                                                    {#                                                				        <p class="desc">{{prod.category.cat_name}}</p>#}
+                                                    {#                                                				        <div class="rating-wrap">#}
+                                                    {#                                                					    <div class="label-rating">#}
+                                                    {#                                                                            {% if prod.brand|length > 0 %}#}
+                                                    {#                                                                            <br>Brand: <b>{{ prod.brand }}</b>#}
+                                                    {#                                                                        {% endif %}</div>#}
+                                                    {#                                                                        </div>#}
+                                                    {#                                                                    </figcaption>#}
+                                                    {#                                                                    <div class="bottom-wrap">#}
+                                                    {#                                                			<div class="price-wrap h5">#}
+                                                    {#                                                				<span class="price-new">${{prod.cost}}</span>#}
+                                                    {#                                                			</div> <!-- price-wrap.// -->#}
+                                                    {#                                                		</div>#}
+
+
                                                 </div>
-                                                <ul class="social">
-                                                    <li><a href="{% url 'shopping:specificitem' cat.id prod.id %}"
-                                                           data-tip="View Product"><i
-                                                            class="fa fa-search"></i></a></li>
-                                                </ul>
-{#                                                                    <figcaption class="info-wrap">#}
-{#                                                				        <h4 class="title">{{prod.prod_name}}</h4>#}
-{#                                                				        <p class="desc">{{prod.category.cat_name}}</p>#}
-{#                                                				        <div class="rating-wrap">#}
-{#                                                					    <div class="label-rating">#}
-{#                                                                            {% if prod.brand|length > 0 %}#}
-{#                                                                            <br>Brand: <b>{{ prod.brand }}</b>#}
-{#                                                                        {% endif %}</div>#}
-{#                                                                        </div>#}
-{#                                                                    </figcaption>#}
-{#                                                                    <div class="bottom-wrap">#}
-{#                                                			<div class="price-wrap h5">#}
-{#                                                				<span class="price-new">${{prod.cost}}</span>#}
-{#                                                			</div> <!-- price-wrap.// -->#}
-{#                                                		</div>#}
-
-
                                             </div>
-                                        </div>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
