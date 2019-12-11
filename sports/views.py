@@ -309,3 +309,33 @@ def participants_list(request, t_id):
     participants = TournamentJoin.objects.filter(tournament=t)
     return render(request, 'sports/participants_list.html',
                   {'participants': participants, 'Tournaments_active': 'active'})
+
+
+@api_view(['POST'])
+def tournament_leave(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        # t = Tournaments.objects.get(name=data['tournament'])
+        # data['tournament'] = t.pk
+
+        # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
+
+        pk = data['tournament']
+        name = data['name']
+        print(pk,name)
+        try:
+            instances = TournamentJoin.objects.filter(tournament_id=pk, name=name)
+            for instance in instances:
+                if instance.user is None:
+                    instance.delete()
+                    tournament = Tournaments.objects.get(pk=pk)
+                    tournament.no_of_joined -= 1
+                    tournament.save()
+                    print('deleted')
+                    return Response('deleted the instance', status=status.HTTP_200_OK)
+            print('not found')
+            return Response('deleted the instance', status=status.HTTP_404_NOT_FOUND)
+        except:
+            pass
+        print('error occured')
+        return Response('invalid data', status=status.HTTP_400_BAD_REQUEST)
