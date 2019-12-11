@@ -23,7 +23,7 @@ urlpatterns = [
     path('edit_tournament/<int:t_id>', views.edit_tournament, name='edit_tournament'),
     path('create_tournament/', views.create_tournament, name='create_tournament'),
     path('edit_coaching_center/<int:c_id>', views.edit_coaching_center, name='edit_coaching_center'),
-
+    path('tournament_leave/', views.tournament_leave , name='tournament_leave'),
     path('snippets/<int:pk>/<str:name>/', views.TournamentDeregister.as_view()),
 
 ]
