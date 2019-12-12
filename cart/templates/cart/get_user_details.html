@@ -1,9 +1,20 @@
 {% extends 'news/base.html' %}
+{% load static%}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit">
-    </form>
+    <div class="hero-area">
+        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 250px;">
+            <div class="hero-content-pages">Delivery  .Address</div>
+        </div>
+    </div><br><br>
+    <center><h4>Enter your delivery details</h4>
+    </center>
+    <div style="margin: auto;width: 40%;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Create" class="submit" id="submit" name="submit"/>
+        </form>
+    </div>
+
 {% endblock %}
