@@ -1,29 +1,77 @@
-{% extends 'user_auth/base.html' %}
+{% extends 'news/base.html' %}
 {% load bootstrap %}
 {% load widget_tweaks %}
 {% load static %}
 
 
-{% block register %}
+{% block content %}
 
-    <a href="{% url 'user_auth:choose_service' 'Tournaments' %}">
-        <button>Tournaments</button>
-    </a>
-    <a href="{% url 'user_auth:choose_service' 'Products' %}">
-        <button>Products</button>
-    </a>
-    <a href="{% url 'user_auth:choose_service' 'Bidding' %}">
-        <button>Bidding</button>
-    </a>
 
-    {% if services %}
-        <div>
-            {% for service in services %}
-                <li>{{ service.service_type }} , {{ service.token }}</li>
-            {% endfor %}
-            {% else %}
-            <h3>You have no API Keys.</h3>
+    <div class="hero-area">
+        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 250px;">
+            <div class="hero-content-pages">
+                AP I Keys
+            </div>
         </div>
-    {% endif %}
+    </div>
 
+    <div class="container section-padding-50">
+        {% if services %}
+            <center><h2>Your API keys</h2>
+                <p>You can change your API Keys for any service type anytime by clicking below...</p></center><br>
+            <ui style="list-style-type:disc;">
+                {% for service in services %}
+                    <li>{{ service.service_type.capitalize }} : &emsp; <span
+                            style="font-size: 20px">{{ service.token }}</span></li>
+                {% endfor %}
+            </ui>
+        {% else %}
+            <h3>Currently you have no API Keys. Choose one of our services below and click on one to get a free API Key
+                for lifetime.</h3>
+        {% endif %}
+    </div>
+
+    <center><h3>Get your API keys here</h3></center>
+    <div id="reservation" class="section">
+        <div class="container section-padding-50">
+            <div class="row">
+
+                <div class="col-md-4 col-md-offset-0 col-sm-5 col-sm-offset-1">
+                    <div class="opening-time row" style="justify-content: center">
+                        <h5>TOURNAMENTS</h5>
+                        <p style="color : #808080"> You can use our API Key to join tournaments.
+                            Click here to get/update your API key now.
+                        </p>
+                        <a href="{% url 'user_auth:choose_service' 'tournaments' %}">
+                            <button class="btn world-btn">Get/Update API</button>
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-md-offset-0 col-sm-5 col-sm-offset-1">
+                    <div class="reserve-form row" style="height:300px;padding: 20px;justify-content: center">
+                        <h5>PRODUCTS DISPLAY</h5>
+                        <p style="color : #808080"> You can use our API Key to get a list of all products which are in
+                            stock.
+                            Click here to get/update your API key now.</p>
+                        <a href="{% url 'user_auth:choose_service' 'products' %}">
+                            <button class="btn world-btn">Get/Update API</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-md-offset-1 col-sm-5 col-sm-offset-1" style="padding-left: 20px">
+                    <div class="opening-time row" style="justify-content: center">
+                        <h5>DELIVERY BIDDING</h5>
+                        <p>You can use our API Key to bid for items.
+                            Click here to get/update your API key now.</p>
+                        <a href="{% url 'user_auth:choose_service' 'bidding' %}">
+                            <button class="btn world-btn">Get/Update API</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
 {% endblock %}

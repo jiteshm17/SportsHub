@@ -18,9 +18,6 @@
     <link rel="stylesheet" href="{% static 'news/css/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'news/css/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'news/css/themify-icons.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
     <style>
         a {
@@ -211,6 +208,57 @@
         {% block style %}
         {% endblock %}
 
+        #reservation.section {
+            padding-bottom:0px;
+        }
+
+        #reservation .bg-image  {
+            height:75%;
+        }
+
+        .reserve-form {
+            padding: 40px 8% 40px;
+            background: #e6e6e6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+            min-height: 300px;
+            border-radius: 10px;
+        }
+
+        .reserve-form  .form-group {
+            margin-bottom:30px;
+        }
+
+        .reserve-form  .form-group label {
+            margin-left: 10px;
+        }
+
+        .reserve-form .input {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .opening-time {
+            padding: 30px 8% 30px;
+            background: #f2f2f2;
+            margin-top: 40px;
+            min-height: 220px;
+        }
+
+        .opening-time:hover{
+            box-shadow: 0 0 6px rgba(0, 0, 0, .2);
+        }
+
+        .opening-time ul li .day {
+            display:inline-block;
+            font-weight:400;
+        }
+
+        .opening-time ul li .hours {
+            float: right;
+            font-size: 14px;
+            margin-top: 12px;
+            font-weight:400;
+            color:#f36500;
+        }
 
     </style>
 
@@ -304,36 +352,39 @@
 <footer class="footer-area">
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-8">
                 <div class="footer-single-widget">
                     <a class="link" href="#" style="font-size:25px;">SportsHub</a>
                 </div>
                 <br>
                 <div class="footer-single-widget">
                     <ul class="footer-menu d-flex justify-content-between">
-                        <li><a class="link" href="#">Home</a></li>
-                        <li><a class="link" href="#">News</a></li>
-                        <li><a class="link" href="#">Sports</a></li>
-                        <li><a class="link" href="#">Contact</a></li>
+                        <li><a class="link" href="{% url 'sports:homepage' %}">Home</a></li>
+                        <li><a class="link" href="{% url 'news:news_list' %}">News</a></li>
+                        <li><a class="link" href="{% url "sports:sports-list" %}">Sports</a></li>
+                        <li><a class="link" href="{% url 'sports:tournament_list' %}">Tournaments</a></li>
+                        <li><a class="link" href="{% url 'sports:coaching_centers_list' %}">Coaching Centers</a></li>
+                        <li><a class="link" href="{% url 'sports:sports_store' %}">Sports Stores</a></li>
+                        <li><a class="link" href="{% url 'shopping:home' %}">Shopping</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <br><br>
+                <div class="footer-single-widget" style="padding-top: 15px">
+                    <ul class="footer-menu">
                         {% if not user.is_authenticated %}
                             <li><a class="link" href="{% url 'user_auth:login' %}">Login</a></li>
                             <li><a class="link" href="{% url 'user_auth:register_user' %}">Signup</a></li>
                         {% else %}
                             <li><a class="link" href="{% url 'user_auth:user_profile' %}">Profile</a></li>
+                            <li><a class="link" href="{% url 'user_auth:get_apis' %}">Get API Keys</a></li>
                             <li><a class="link" href="{% url 'user_auth:logout_user' %}">Logout</a></li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
-                <div class="footer-single-widget"><br>
-                    <h5>Subscribe</h5><br>
-                    <form style="padding: 0px" action="#" method="post">
-                        <input type="email" name="email" id="email" placeholder="Enter your mail">
-                        <button type="button"><i class="fa fa-arrow-right"></i></button>
-                    </form>
-                </div>
-            </div>
+
         </div>
     </div>
 </footer>
