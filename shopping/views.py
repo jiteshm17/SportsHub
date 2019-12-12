@@ -57,11 +57,20 @@ def itemsview(request, pk):
     categories = Category.objects.all()
     cat = Category.objects.get(id=pk)
     current_order_products = []
+    delivery = DeliveryLocation.objects.get(user_name=request.user)
+    form = DeliveryLocationForm(instance=delivery)
+    if request.method == 'POST':
+        form = DeliveryLocationForm(request.POST, instance=delivery)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('shopping:items', args=(pk,)))
+
     context = {
         'categories': categories,
         'cat': cat,
         'current_order_products': current_order_products,
-        'Shopping': 'active'
+        'Shopping': 'active',
+        'form': form
     }
 
     return render(request, "shopping/items.html", context)

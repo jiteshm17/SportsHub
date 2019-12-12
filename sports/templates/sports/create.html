@@ -3,18 +3,14 @@
 
 {% block content %}
     <div class="hero-area">
-        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 300px;">
+        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 250px;">
             <div class="hero-content-pages">Create {{ name }}</div>
         </div>
     </div>
     <form class="booking-form" method="post" enctype="multipart/form-data"
-          style="width:80%">
+          style="width:60%;margin: auto">
         {% csrf_token %}
-        <div class="hero-content"
-             style="padding:0px 0px 15px 0px;  font-size:35px; color: black;">
-            Create a {{ name }}
-
-        </div>
+        <center><h4>Enter details of {{ name }}</h4></center>
         {% if error %}
             <p style="color: red">{{ error }}</p>
         {% endif %}
