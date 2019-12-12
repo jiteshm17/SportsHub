@@ -4,6 +4,7 @@ from user_auth import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+
 urlpatterns = [
     path('', include('sports.urls')),
     path('paypal/', include('paypal.standard.ipn.urls')),
@@ -26,7 +27,6 @@ urlpatterns = [
     path('password_reset_complete/',
          auth_views.PasswordResetCompleteView.as_view(template_name='registration/reset_password_complete.html'),
          name='password_reset_complete'),
-
     path('api/', include('sports.urls'))
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

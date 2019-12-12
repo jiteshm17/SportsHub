@@ -12,7 +12,7 @@ from shopping.forms import writereview
 from .models import Category, Product, Review, DeliveryOptions
 from .serializers import ProductSerializer, CategorySerializer
 from user_auth.forms import DeliveryLocationForm
-from user_auth.models import DeliveryLocation, Profile
+from user_auth.models import DeliveryLocation, Profile, Services
 import requests
 
 
@@ -41,7 +41,7 @@ def list_categories(request):
                         postal_locations = response.json()
                         location = postal_locations[0]["PostOffice"][0]["Division"]
                         instance = DeliveryLocation.objects.get(user_name=request.user)
-                        print('got responce',location)
+                        print('got responce', location)
                         location = location.split(' ')
                         location = location[0]
                         print('got responce', location.lower())
@@ -180,62 +180,74 @@ def reviewtext(request, categ, product):
 @api_view(['GET'])
 def productList(request):
     if request.method == 'GET':
-        products = Product.objects.all()
-        for product in products:
-            product.stock *= 0.1
-        serializer = ProductSerializer(products, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        if Services.objects.filter(token=request.GET.get('api_key'), service_type='Products').exists():
+            products = Product.objects.all()
+            for product in products:
+                product.stock *= 0.1
+            serializer = ProductSerializer(products, many=True)
+            return JsonResponse(serializer.data, safe=False)
+        else:
+            return Response('Invalid API Key', status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 def categoriesList(request):
     if request.method == 'GET':
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        if Services.objects.filter(token=request.GET.get('api_key'), service_type='Products').exists():
+            categories = Category.objects.all()
+            serializer = CategorySerializer(categories, many=True)
+            return JsonResponse(serializer.data, safe=False)
+        else:
+            return Response('Invalid API Key', status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
 def bidding(request):
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-        # t = Tournaments.objects.get(name=data['tournament'])
-        # data['tournament'] = t.pk
+    if Services.objects.filter(token=request.GET.get('api_key'), service_type='Bidding').exists():
+        if request.method == 'POST':
+            data = JSONParser().parse(request)
+            # t = Tournaments.objects.get(name=data['tournament'])
+            # data['tournament'] = t.pk
 
-        # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
-        p_id = data['product']
-        name = data['name']
-        name_id = data['name_id']
-        days = data['days']
-        cost = data['cost']
-        location = data['location']
-        print(name, location)
-        if 'msg' in data and data['msg'] == 'delete':
-            try:
-                product = Product.objects.get(pk=p_id)
-                instance = DeliveryOptions.objects.get(product=product, name_id=name_id, location=location.lower())
-                instance.delete()
-                print('deleted')
-            except:
-                print('found error')
-                return Response({'data is not valid'}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'data deleted'}, status=status.HTTP_201_CREATED)
-
-        else:
-            try:
-                product = Product.objects.get(pk=p_id)
-                if DeliveryOptions.objects.filter(product=product, name_id=name_id, location=location.lower()).exists():
+            # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
+            p_id = data['product']
+            name = data['name']
+            name_id = data['name_id']
+            days = data['days']
+            cost = data['cost']
+            location = data['location']
+            print(name, location)
+            if 'msg' in data and data['msg'] == 'delete':
+                try:
+                    product = Product.objects.get(pk=p_id)
                     instance = DeliveryOptions.objects.get(product=product, name_id=name_id, location=location.lower())
-                    instance.cost = cost
-                    instance.days = days
-                    instance.name = name
-                    instance.save()
-                    return Response({'data update'}, status=status.HTTP_201_CREATED)
-                else:
-                    print('creating new row')
-                    DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost,
-                                                   location=location.lower())
-                    return Response({'created'}, status=status.HTTP_201_CREATED)
-            except:
-                pass
-            return Response({'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+                    instance.delete()
+                    print('deleted')
+                except:
+                    print('found error')
+                    return Response({'data is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'data deleted'}, status=status.HTTP_201_CREATED)
+
+            else:
+                try:
+                    product = Product.objects.get(pk=p_id)
+                    if DeliveryOptions.objects.filter(product=product, name_id=name_id,
+                                                      location=location.lower()).exists():
+                        instance = DeliveryOptions.objects.get(product=product, name_id=name_id,
+                                                               location=location.lower())
+                        instance.cost = cost
+                        instance.days = days
+                        instance.name = name
+                        instance.save()
+                        return Response({'data update'}, status=status.HTTP_201_CREATED)
+                    else:
+                        print('creating new row')
+                        DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days,
+                                                       cost=cost,
+                                                       location=location.lower())
+                        return Response({'created'}, status=status.HTTP_201_CREATED)
+                except:
+                    pass
+                return Response({'Bad request'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response('Invalid API Key ', status=status.HTTP_400_BAD_REQUEST)
