@@ -322,7 +322,7 @@ def tournament_leave(request):
 
         pk = data['tournament']
         name = data['name']
-        print(pk,name)
+        print(pk, name)
         try:
             instances = TournamentJoin.objects.filter(tournament_id=pk, name=name)
             for instance in instances:

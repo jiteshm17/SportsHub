@@ -13,8 +13,10 @@ from .models import Category, Product, Review, DeliveryOptions
 from .serializers import ProductSerializer, CategorySerializer
 from user_auth.forms import DeliveryLocationForm
 from user_auth.models import DeliveryLocation, Profile
+import requests
 
 
+@login_required
 def list_categories(request):
     categories = Category.objects.all()
     products = Product.objects.all()
@@ -32,8 +34,28 @@ def list_categories(request):
                     request.session['msg'] = msg
                     return redirect(reverse('cart:order_summary', args=('0',)))
                 else:
-                    form.save()
-                return redirect('shopping:home')
+                    pincode = form.cleaned_data['pin_code']
+                    url = 'https://api.postalpincode.in/pincode/' + str(pincode)
+                    try:
+                        response = requests.get(url)
+                        postal_locations = response.json()
+                        location = postal_locations[0]["PostOffice"][0]["Division"]
+                        instance = DeliveryLocation.objects.get(user_name=request.user)
+                        print('got responce',location)
+                        location = location.split(' ')
+                        location = location[0]
+                        print('got responce', location.lower())
+                        instance.pin_code = pincode
+                        instance.location = location.lower()
+                        instance.save()
+                        return redirect('shopping:home')
+                    except:
+                        print('error')
+                        return render(request, 'shopping/index.html',
+                                      {'categories': categories, 'products': products, 'Shopping': 'active',
+                                       'form': form,
+                                       'msg': 'Enter a vaild pincode'})
+
         return render(request, 'shopping/index.html',
                       {'categories': categories, 'products': products, 'Shopping': 'active', 'form': form,
                        'delivery_exists': True})
@@ -43,8 +65,18 @@ def list_categories(request):
         if form.is_valid():
             u = User.objects.get(username=request.user.username)
             pin_code = form.cleaned_data['pin_code']
-            DeliveryLocation.objects.create(user_name=u, pin_code=pin_code)
-            return redirect('shopping:home')
+            url = 'https://api.postalpincode.in/pincode/' + str(pin_code)
+            try:
+                response = requests.get(url)
+                postal_locations = response.json()
+                location = postal_locations[0]["PostOffice"][0]["Division"]
+                DeliveryLocation.objects.create(user_name=u, pin_code=pin_code, location=location.lower())
+                return redirect('shopping:home')
+            except:
+                print('error')
+                return render(request, 'shopping/index.html',
+                              {'categories': categories, 'products': products, 'Shopping': 'active', 'form': form,
+                               'msg': 'Enter a vaild pincode'})
         else:
             print('The form is not valid')
             print(form.errors)
@@ -78,7 +110,6 @@ def itemdetailview(request, ck, pk):
     delivery_exists = False
     p = Product.objects.get(pk=pk)
     user_pin_code = DeliveryLocation.objects.get(user_name=request.user)
-
     in_cart = False
 
     if OrderItem.objects.filter(product=Product.objects.get(id=pk), is_ordered=False).exists():
@@ -96,8 +127,8 @@ def itemdetailview(request, ck, pk):
             return redirect(reverse('shopping:specificitem', args=(ck, pk,)))
     else:
         form = writereview()
-    if DeliveryOptions.objects.filter(product=p, pincode=user_pin_code.pin_code).exists():
-        vendorsList = DeliveryOptions.objects.filter(product=p, pincode=user_pin_code.pin_code)
+    if DeliveryOptions.objects.filter(product=p, location=user_pin_code.location).exists():
+        vendorsList = DeliveryOptions.objects.filter(product=p, location=user_pin_code.location)
         print('The number of vendors are', len(vendorsList))
         delivery_exists = True
         return render(request, 'shopping/itemdetail.html', {'form': form,
@@ -168,12 +199,12 @@ def bidding(request):
         name_id = data['name_id']
         days = data['days']
         cost = data['cost']
-        pincode = data['pincode']
-        print(name, pincode)
+        location = data['location']
+        print(name, location)
         if 'msg' in data and data['msg'] == 'delete':
             try:
                 product = Product.objects.get(pk=p_id)
-                instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)
+                instance = DeliveryOptions.objects.get(product=product, name_id=name_id, location=location.lower())
                 instance.delete()
                 print('deleted')
             except:
@@ -184,8 +215,8 @@ def bidding(request):
         else:
             try:
                 product = Product.objects.get(pk=p_id)
-                if DeliveryOptions.objects.filter(product=product, name_id=name_id, pincode=pincode).exists():
-                    instance = DeliveryOptions.objects.get(product=product, name_id=name_id, pincode=pincode)
+                if DeliveryOptions.objects.filter(product=product, name_id=name_id, location=location.lower()).exists():
+                    instance = DeliveryOptions.objects.get(product=product, name_id=name_id, location=location.lower())
                     instance.cost = cost
                     instance.days = days
                     instance.name = name
@@ -194,7 +225,7 @@ def bidding(request):
                 else:
                     print('creating new row')
                     DeliveryOptions.objects.create(product=product, name=name, name_id=name_id, days=days, cost=cost,
-                                                   pincode=pincode)
+                                                   location=location.lower())
                     return Response({'created'}, status=status.HTTP_201_CREATED)
             except:
                 pass
