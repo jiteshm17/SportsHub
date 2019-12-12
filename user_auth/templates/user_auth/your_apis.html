@@ -1,0 +1,27 @@
+{% extends 'user_auth/base.html' %}
+{% load bootstrap %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block register %}
+
+    <a href="{% url 'user_auth:choose_service' 'tournaments' %}">
+        <button>Tournaments</button>
+    </a>
+    <a href="{% url 'user_auth:choose_service' 'products' %}">
+        <button>Products</button>
+    </a>
+    <a href="{% url 'user_auth:choose_service' 'bidding' %}">
+        <button>Bidding</button>
+    </a>
+
+    {% if services %}
+        {% for service in services %}
+            <li>{{ service.service_type }} , {{ service.token }}</li>
+        {% endfor %}
+    {% else %}
+        <h3>You have no API Keys.</h3>
+    {% endif %}
+
+{% endblock %}

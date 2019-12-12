@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<a href="{% url 'user_auth:choose_service' 'tournaments' %}">
+    <button>Tournaments</button>
+</a>
+<a href="{% url 'user_auth:choose_service' 'products' %}">
+    <button>Products</button>
+</a>
+<a href="{% url 'user_auth:choose_service' 'bidding' %}">
+    <button>Bidding</button>
+</a>
+</body>
+</html>
