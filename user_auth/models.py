@@ -19,6 +19,7 @@ def pin_code_validation(pincode):
 class DeliveryLocation(models.Model):
     user_name = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     pin_code = models.IntegerField(validators=[pin_code_validation])
+    location = models.CharField(max_length=150)
 
     def __str__(self):
         return self.user_name.username
