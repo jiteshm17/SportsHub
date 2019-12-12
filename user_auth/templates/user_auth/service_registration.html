@@ -1,0 +1,41 @@
+{% extends 'user_auth/base.html' %}
+{% load bootstrap %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block register %}
+
+    <body>
+    <div class="main" style="padding-top: 150px">
+        <div class="container-form">
+            <div class="booking-content">
+                <div class="booking-form">
+                    <form class="booking-form" method="post">
+                        {% csrf_token %}
+                        <div class="hero-content" style="padding:0px 0px 30px 0px;  font-size:35px; color: black;">Sign
+                            Up
+                        </div>
+                        {% for field in form %}
+                            <div class="form-group form-input">
+                                <span class="form-label">{{ field.label_tag }}</span><br>
+                                {{ field }}
+                            </div>
+
+                            {% for error in field.errors %}
+                                <p style="font-size: 15px; color: red">{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+
+                        <div class="form-submit"  style="padding-left: 110px">
+                            <input type="submit" value="Register" class="submit" id="submit" name="submit"/>
+                        </div>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+
+{% endblock %}

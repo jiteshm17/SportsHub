@@ -19,6 +19,8 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from sports.serializers import TournamentSerializer, JoinTournamentSerializer
 from django.views.generic import ListView, DetailView
+
+from user_auth.models import Services
 from .models import Sport_Info
 
 from django.views.generic import ListView, DetailView
@@ -217,11 +219,15 @@ def delete_coaching_centers(request, c_id):
 
 
 @api_view(['GET'])
-def tournamentsList(request):
+def tournamentsList(request, api_key):
+    print('api key is', api_key)
     if request.method == 'GET':
-        snippets = Tournaments.objects.all()
-        serializer = TournamentSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        if Services.objects.filter(api_key=api_key, service_type='Get Tournaments').exists():
+            snippets = Tournaments.objects.all()
+            serializer = TournamentSerializer(snippets, many=True)
+            return JsonResponse(serializer.data, safe=False)
+        else:
+            return Response('Invalid API Key', status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

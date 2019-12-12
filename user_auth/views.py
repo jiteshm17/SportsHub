@@ -13,6 +13,29 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
+from .forms import ServicesForm, ServiceRegistrationForm
+from .models import Services
+from user_auth.utils.generate_token import generatetoken
+
+
+@login_required
+def your_apis(request):
+    services = Services.objects.filter(user_name=request.user).order_by('service_type')
+    return render(request, 'user_auth/your_apis.html', {'services': services})
+
+
+@login_required
+def choose_service(request, service_name):
+    if request.user.is_authenticated:
+        if not Services.objects.filter(user_name=request.user, service_type=service_name).exists():
+            Services.objects.create(user_name=request.user, service_type=service_name, token=generatetoken())
+        else:
+            service = Services.objects.get(user_name=request.user, service_type=service_name)
+            service.token = generatetoken()
+            service.save()
+        return redirect('user_auth:your_apis')
+    else:
+        return redirect('user_auth:login')
 
 
 def login_page(request):
@@ -104,3 +127,7 @@ def register_user(request):
             return redirect('user_auth:login')
     return render(request, 'user_auth/register.html',
                   {'form': form, 'form_profile': form_profile, 'signup_active': 'active'})
+
+
+def get_apis(request):
+    return render(request, 'user_auth/get_api.html', {'Get_API_Key': 'active'})
