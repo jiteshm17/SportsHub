@@ -28,6 +28,7 @@ def your_apis(request):
 def choose_service(request, service_name):
     if request.user.is_authenticated:
         if not Services.objects.filter(user_name=request.user, service_type=service_name).exists():
+            print(service_name)
             Services.objects.create(user_name=request.user, service_type=service_name, token=generatetoken())
         else:
             service = Services.objects.get(user_name=request.user, service_type=service_name)

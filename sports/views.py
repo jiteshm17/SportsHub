@@ -219,10 +219,9 @@ def delete_coaching_centers(request, c_id):
 
 
 @api_view(['GET'])
-def tournamentsList(request, api_key):
-    print('api key is', api_key)
+def tournamentsList(request):
     if request.method == 'GET':
-        if Services.objects.filter(api_key=api_key, service_type='Get Tournaments').exists():
+        if Services.objects.filter(token=request.GET.get('api_key'), service_type='Tournaments').exists():
             snippets = Tournaments.objects.all()
             serializer = TournamentSerializer(snippets, many=True)
             return JsonResponse(serializer.data, safe=False)
@@ -232,28 +231,26 @@ def tournamentsList(request, api_key):
 
 @api_view(['POST'])
 def tournamentsJoin(request):
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-        # t = Tournaments.objects.get(name=data['tournament'])
-        # data['tournament'] = t.pk
-
-        # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
-
-        serializer = JoinTournamentSerializer(data=data)
-        print(data)
-        if serializer.is_valid():
-            tournament = Tournaments.objects.get(pk=data['tournament'])
-            tournament.no_of_joined += 1
-            tournament.save()
-            print('User Joined')
-            print(data['tournament'])
-            # t = Tournaments.objects.get(pk=data['tournament'])
-            # t.no_of_joined += 1
-            # t.save()
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if Services.objects.filter(token=request.GET.get('api_key'), service_type='Tournaments').exists():
+        if request.method == 'POST':
+            data = JSONParser().parse(request)
+            serializer = JoinTournamentSerializer(data=data)
+            print(data)
+            if serializer.is_valid():
+                tournament = Tournaments.objects.get(pk=data['tournament'])
+                tournament.no_of_joined += 1
+                tournament.save()
+                print('User Joined')
+                print(data['tournament'])
+                # t = Tournaments.objects.get(pk=data['tournament'])
+                # t.no_of_joined += 1
+                # t.save()
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response('Invalid API Key', status=status.HTTP_400_BAD_REQUEST)
 
 
 class TournamentDeregister(APIView):

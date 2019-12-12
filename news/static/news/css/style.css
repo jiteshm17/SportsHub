@@ -589,6 +589,12 @@ input:-ms-input-placeholder {
 input:-moz-placeholder {
   color: #bebebe; }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .submit {
   width: auto;
   background: #b3b3b3;
@@ -1423,7 +1429,7 @@ textarea:focus ~ .highlight {
 /* Footer Area CSS */
 .footer-area {
   background-color: #161616;
-  padding: 70px 0;
+  padding: 50px 0;
   position: relative;
   z-index: 1; }
   .footer-area .footer-single-widget .copywrite-text p {
@@ -1441,7 +1447,7 @@ textarea:focus ~ .highlight {
         display: block; }
     @media only screen and (max-width: 767px) {
       .footer-area .footer-single-widget .footer-menu {
-        margin: 50px 0; } }
+        margin: 5x0px 0; } }
   .footer-area .footer-single-widget h5 {
     font-size: 18px;
     font-family: "Ubuntu", sans-serif;
