@@ -6,22 +6,24 @@
 
 {% block register %}
 
-    <a href="{% url 'user_auth:choose_service' 'tournaments' %}">
+    <a href="{% url 'user_auth:choose_service' 'Tournaments' %}">
         <button>Tournaments</button>
     </a>
-    <a href="{% url 'user_auth:choose_service' 'products' %}">
+    <a href="{% url 'user_auth:choose_service' 'Products' %}">
         <button>Products</button>
     </a>
-    <a href="{% url 'user_auth:choose_service' 'bidding' %}">
+    <a href="{% url 'user_auth:choose_service' 'Bidding' %}">
         <button>Bidding</button>
     </a>
 
     {% if services %}
-        {% for service in services %}
-            <li>{{ service.service_type }} , {{ service.token }}</li>
-        {% endfor %}
-    {% else %}
-        <h3>You have no API Keys.</h3>
+        <div>
+            {% for service in services %}
+                <li>{{ service.service_type }} , {{ service.token }}</li>
+            {% endfor %}
+            {% else %}
+            <h3>You have no API Keys.</h3>
+        </div>
     {% endif %}
 
 {% endblock %}
