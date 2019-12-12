@@ -96,7 +96,7 @@
         }
 
         .product-grid6 .title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
             text-transform: capitalize;
             margin: 0 0 10px;
@@ -211,41 +211,47 @@
         {% block style %}
         {% endblock %}
 
-        .form-inline label {
-          margin: 5px 10px 5px 0;
+        .large-header {
+           position: relative;
+           width: 100%;
+           background: #111;
+           overflow: hidden;
+           background-size: cover;
+           background-position: center center;
+           z-index: 1;
         }
 
-        .form-inline input {
-          vertical-align: middle;
-          margin: 5px 10px 5px 0;
-          padding: 10px;
-          background-color: #fff;
-          border-bottom: 1px solid #ddd;
+        .demo .large-header {
+           background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/499416/demo-bg.jpg");
         }
 
-        .form-inline button {
-          padding: 10px 20px;
-          background-color: dodgerblue;
-          border: 1px solid #ddd;
-          color: white;
-          cursor: pointer;
+        .main-title {
+           position: absolute;
+           margin: 0;
+           padding: 0;
+           color: #F9F1E9;
+           text-align: center;
+           top: 50%;
+           left: 50%;
+           -webkit-transform: translate3d(-50%, -50%, 0);
+           transform: translate3d(-50%, -50%, 0);
         }
 
-        .form-inline button:hover {
-          background-color: royalblue;
+        .demo .main-title {
+           text-transform: uppercase;
+           font-size: 4.2em;
+           letter-spacing: 0.1em;
         }
 
-        @media (max-width: 800px) {
-          .form-inline input {
-            margin: 10px 0;
-          }
-
-          .form-inline {
-            flex-direction: column;
-            align-items: stretch;
-          }
+        .main-title .thin {
+           font-weight: 200;
         }
 
+        @media only screen and (max-width: 768px) {
+           .demo .main-title {
+              font-size: 3em;
+           }
+        }
 
     </style>
 
@@ -305,15 +311,15 @@
                                 </li>
                             {% else %}
                                 <li class="nav-item dropdown {{ user_active }}">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true"
-                                   aria-expanded="false">{{ user.username }}</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'user_auth:user_profile' %}">My Profile</a>
-                                <a class="dropdown-item" href="{% url 'user_auth:logout_user' %}">Logout</a>
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">{{ user.username }}</a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{% url 'user_auth:user_profile' %}">My Profile</a>
+                                        <a class="dropdown-item" href="{% url 'user_auth:logout_user' %}">Logout</a>
+                                    </div>
+                                </li>
                             {% endif %}
-                            </div>
-                            </li>
                         </ul>
                     </div>
                 </nav>

@@ -89,10 +89,6 @@ a:hover, a:focus {
   background-size: cover;
   }
 
-  #slide3 {
-    background-color: white;
-  }
-
 #preloader {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -220,7 +216,8 @@ img {
 .bg-img {
   background-position: center center;
   background-size: cover;
-  background-repeat: no-repeat;}
+  background-repeat: no-repeat;
+}
 
 .bg-transparent {
   background-color: transparent; }
@@ -409,7 +406,7 @@ img {
   padding:200px;
   text-align:center;
   font-family:mountains;
-  font-size: 120px;
+  font-size: 110px;
   color: white;
 }
 
@@ -417,14 +414,14 @@ img {
   padding: 120px 0px 70px 230px;
   text-align:left;
   font-family:mountains;
-  font-size: 60px;
+  font-size: 42px;
   color: white;
 }
 
 .hero-content .hero-meta-data {
-  font-size: 45px;
+  font-size: 20px;
   font-family : Work sans;
-  top:-15px;
+  top:25px;
   position: relative;
 }
 
