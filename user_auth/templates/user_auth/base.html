@@ -2,26 +2,26 @@
 <!doctype html>
 <html lang="en">
 
-  <head>
+<head>
     <title>SportsHub</title>
-        <link rel="stylesheet" href="{% static 'news/css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'news/css/animate.css' %}">
-        <link rel="stylesheet" href="{% static 'news/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'news/css/font-awesome.min.css' %}">
-        <link rel="stylesheet" href="{% static 'news/css/magnific-popup.css' %}">
-        <link rel="stylesheet" href="{% static 'news/css/owl.carousel.css' %}">
-        <link rel="stylesheet" href="{% static 'news/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'news/css/themify-icons.css' %}">
 
     <style>
         a {
-          -webkit-transition-duration: 500ms;
-          transition-duration: 500ms;
-          text-decoration: none;
-          outline: none;
-          font-size: 14px;
-          font-weight: 400;
-          font-family: "Ubuntu", sans-serif;
-          color: black;
+            -webkit-transition-duration: 500ms;
+            transition-duration: 500ms;
+            text-decoration: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 400;
+            font-family: "Ubuntu", sans-serif;
+            color: black;
         }
 
         a:hover, a:focus {
@@ -34,8 +34,11 @@
             font-weight: 400;
             color: #0000ff;
         }
+
         a.link {
-            color: white;}
+            color: white;
+        }
+
         /*
         .header-area {
             position: fixed;
@@ -53,21 +56,23 @@
 
     </style>
 
-  </head>
+</head>
 
-  <body>
-     <header class="header-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="navbar navbar-expand-lg">
-                        <!-- Title -->
-                        <a class="navbar-brand" href="#"><span style="font-size: 20px;color: white">SportsHub</span></a>
-                        <!-- Navbar Toggler -->
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#worldNav" aria-controls="worldNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                        <!-- Navbar -->
-                        <div class="collapse navbar-collapse" id="worldNav">
-                            <ul class="navbar-nav ml-auto">
+<body>
+<header class="header-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="navbar navbar-expand-lg">
+                    <!-- Title -->
+                    <a class="navbar-brand" href="#"><span style="font-size: 20px;color: white">SportsHub</span></a>
+                    <!-- Navbar Toggler -->
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#worldNav"
+                            aria-controls="worldNav" aria-expanded="false" aria-label="Toggle navigation"><span
+                            class="navbar-toggler-icon"></span></button>
+                    <!-- Navbar -->
+                    <div class="collapse navbar-collapse" id="worldNav">
+                        <ul class="navbar-nav ml-auto">
                             <li class="nav-item {{ Home }}">
                                 <a class="nav-link " href={% url 'sports:homepage' %}>Home</a>
                             </li>
@@ -89,9 +94,18 @@
                             <li class="nav-item {{ Shopping }}">
                                 <a class="nav-link" href={% url 'shopping:home' %}>Shopping</a>
                             </li>
+
+                            <li class="nav-item {{ Get_API_Key }}">
+                                <a class="nav-link" href={% url 'user_auth:get_apis' %}>Get API Keys</a>
+                            </li>
+
                             {% if not user.is_authenticated %}
-                                <li class="nav-item {{ login_active }}"><a class="nav-link" href="{% url 'user_auth:login' %}">Login</a></li>
-                                <li class="nav-item {{ signup_active }}"><a class="nav-link" href="{% url 'user_auth:register_user' %}">SignUp</a></li>
+                                <li class="nav-item {{ login_active }}"><a class="nav-link"
+                                                                           href="{% url 'user_auth:login' %}">Login</a>
+                                </li>
+                                <li class="nav-item {{ signup_active }}"><a class="nav-link"
+                                                                            href="{% url 'user_auth:register_user' %}">SignUp</a>
+                                </li>
                             {% else %}
                                 <li class="nav-item dropdown {{ user_active }}">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -105,76 +119,76 @@
                             </li>
                                 {% endif %}
                         </ul>
-                        </div>
-                    </nav>
-                </div>
+                    </div>
+                </nav>
             </div>
-        </div>
-    </header>
-    <!-- ***** Header Area End ***** -->
-
-    <!-- ********** Hero Area Start ********** -->
-    <div class="hero-area" style="color:black">
-        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="padding-bottom: 100px;">
-            {% block verify %}{% endblock %}
-            {% block content %}{% endblock %}
-            {% block login %}{% endblock %}
-            {% block register %}{% endblock %}
-            {% block profile %}{% endblock %}
         </div>
     </div>
-    <!-- ********** Hero Area End ********** -->
+</header>
+<!-- ***** Header Area End ***** -->
 
-        <!-- ***** Footer Area Start ***** -->
-    <footer class="footer-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    <div class="footer-single-widget">
-                        <a class="link" href="#" style="font-size:25px;">SportsHub</a>
-                    </div>
-                    <br>
-                    <div class="footer-single-widget">
-                        <ul class="footer-menu d-flex justify-content-between">
-                            <li><a class="link" href="#">Home</a></li>
-                            <li><a class="link" href="#">News</a></li>
-                            <li><a class="link" href="#">Sports</a></li>
-                            <li><a class="link" href="#">Contact</a></li>
-                            {% if not user.is_authenticated %}
-                                <li><a class="link" href="{% url 'user_auth:login' %}">Login</a></li>
-                                <li><a class="link" href="{% url 'user_auth:register_user' %}">Signup</a></li>
-                            {% else %}
-                                <li><a class="link"  href="{% url 'user_auth:user_profile' %}">Profile</a></li>
-                                <li><a class="link" href="{% url 'user_auth:logout_user' %}">Logout</a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
+<!-- ********** Hero Area Start ********** -->
+<div class="hero-area" style="color:black">
+    <div class="single-hero-slide bg-img background-overlay" id="slide2" style="padding-bottom: 100px;">
+        {% block verify %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block login %}{% endblock %}
+        {% block register %}{% endblock %}
+        {% block profile %}{% endblock %}
+    </div>
+</div>
+<!-- ********** Hero Area End ********** -->
+
+<!-- ***** Footer Area Start ***** -->
+<footer class="footer-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="footer-single-widget">
+                    <a class="link" href="#" style="font-size:25px;">SportsHub</a>
                 </div>
-                <div class="col-12 col-md-6">
-                    <div class="footer-single-widget"><br>
-                        <h5>Subscribe</h5><br>
-                        <form style="padding: 0px" action="#" method="post">
-                            <input type="email" name="email" id="email" placeholder="Enter your mail">
-                            <button type="button"><i class="fa fa-arrow-right"></i></button>
-                        </form>
-                    </div>
+                <br>
+                <div class="footer-single-widget">
+                    <ul class="footer-menu d-flex justify-content-between">
+                        <li><a class="link" href="#">Home</a></li>
+                        <li><a class="link" href="#">News</a></li>
+                        <li><a class="link" href="#">Sports</a></li>
+                        <li><a class="link" href="#">Contact</a></li>
+                        {% if not user.is_authenticated %}
+                            <li><a class="link" href="{% url 'user_auth:login' %}">Login</a></li>
+                            <li><a class="link" href="{% url 'user_auth:register_user' %}">Signup</a></li>
+                        {% else %}
+                            <li><a class="link" href="{% url 'user_auth:user_profile' %}">Profile</a></li>
+                            <li><a class="link" href="{% url 'user_auth:logout_user' %}">Logout</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="footer-single-widget"><br>
+                    <h5>Subscribe</h5><br>
+                    <form style="padding: 0px" action="#" method="post">
+                        <input type="email" name="email" id="email" placeholder="Enter your mail">
+                        <button type="button"><i class="fa fa-arrow-right"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
-    </footer>
-    <!-- ***** Footer Area End ***** -->
+    </div>
+</footer>
+<!-- ***** Footer Area End ***** -->
 
 
-    <!-- jQuery (Necessary for All JavaScript Plugins) -->
-    <script src="{% static 'news/js/jquery/jquery-2.2.4.min.js' %}"></script>
-    <!-- Popper js -->
-    <script src="{% static 'news/js/popper.min.js' %}"></script>
-    <!-- Bootstrap js -->
-    <script src="{% static 'news/js/bootstrap.min.js' %}"></script>
-    <!-- Plugins js -->
-    <script src="{% static 'news/js/plugins.js' %}"></script>
-    <!-- Active js -->
-    <script src="{% static 'news/js/active.js' %}"></script>
+<!-- jQuery (Necessary for All JavaScript Plugins) -->
+<script src="{% static 'news/js/jquery/jquery-2.2.4.min.js' %}"></script>
+<!-- Popper js -->
+<script src="{% static 'news/js/popper.min.js' %}"></script>
+<!-- Bootstrap js -->
+<script src="{% static 'news/js/bootstrap.min.js' %}"></script>
+<!-- Plugins js -->
+<script src="{% static 'news/js/plugins.js' %}"></script>
+<!-- Active js -->
+<script src="{% static 'news/js/active.js' %}"></script>
 
-  </body>
+</body>
 </html>

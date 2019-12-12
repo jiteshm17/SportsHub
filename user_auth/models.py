@@ -34,3 +34,20 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user_name.username
+
+
+service_choices = (('Tournaments', 'Tournaments'),
+                   ('Products', 'Products'),
+                   ('Bidding', 'Bidding'))
+
+
+class Services(models.Model):
+    user_name = models.ForeignKey(User, on_delete=models.CASCADE)
+    service_type = models.CharField(max_length=150, choices=service_choices)
+    token = models.CharField(max_length=150)
+
+    class Meta:
+        unique_together = ('user_name', 'service_type')
+
+    def __str__(self):
+        return self.user_name.username

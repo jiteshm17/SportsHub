@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import DeliveryLocation
+from .models import DeliveryLocation, Services
 from user_auth.models import Profile
 
 
@@ -11,6 +11,24 @@ class DeliveryLocationForm(forms.ModelForm):
         labels = {
             'pin_code': 'Pin Code'
         }
+
+
+class ServicesForm(forms.ModelForm):
+    class Meta:
+        model = Services
+        fields = ['service_type']
+        labels = {
+            'service_type': 'Choose your service'
+        }
+
+
+class ServiceRegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
 
 class RegisterForm(forms.ModelForm):

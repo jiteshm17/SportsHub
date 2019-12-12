@@ -16,7 +16,7 @@ urlpatterns = [
     path('delete_coaching_centers/<int:c_id>', views.delete_coaching_centers, name='delete_coaching_centers'),
     path('create_coaching_centers/', views.create_coaching_center, name='create_coaching_centers'),
     path('sports_store/', views.sports_store, name='sports_store'),
-    path('tournaments/', views.tournamentsList),
+    path('tournaments/<str:api_key>', views.tournamentsList),
     path('tournaments_join/', views.tournamentsJoin, name='tournaments_join'),
     path('sports_list/', Sport_InfoListView.as_view(), name='sports-list'),
     path('sport/<int:pk>/', views.Sport_InfoDetailView.as_view(), name='sport-detail'),

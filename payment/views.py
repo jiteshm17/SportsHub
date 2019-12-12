@@ -44,7 +44,7 @@ def payment_done(request):
                 {'name': d.name_id, 'product': d.product.id, 'location': pincode.location, 'pincode': pincode.pin_code,
                  'prod_name': d.product.prod_name,
                  'address': profile.address, 'phonenum': profile.phone_number,
-                 'customer_name': request.user.username})
+                 'customer_name': request.user.username, 'mail': request.user.email, 'order_id': order_to_purchase.ref_code})
             print('requesting')
             requests.post(url=url, data=data)
 
