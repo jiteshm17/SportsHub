@@ -37,7 +37,7 @@ def homepage(request):
         d1_ts = time.mktime(last_update[0].last_update.timetuple())
         d2_ts = time.mktime(now.timetuple())
 
-        if (int(d2_ts - d1_ts) / 60) > 1000:
+        if (int(d2_ts - d1_ts) / 60) > 1000000:
             scrape_all_sports()
             LastNewsUpdate.objects.all().delete()
             LastNewsUpdate.objects.create(last_update=datetime.now())
@@ -316,29 +316,32 @@ def participants_list(request, t_id):
 
 @api_view(['POST'])
 def tournament_leave(request):
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-        # t = Tournaments.objects.get(name=data['tournament'])
-        # data['tournament'] = t.pk
+    if Services.objects.filter(token=request.GET.get('api_key'), service_type='Tournaments').exists():
+        if request.method == 'POST':
+            data = JSONParser().parse(request)
+            # t = Tournaments.objects.get(name=data['tournament'])
+            # data['tournament'] = t.pk
 
-        # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
+            # tournament = get_object_or_404(Tournaments, title=request.data.get('tournament'))
 
-        pk = data['tournament']
-        name = data['name']
-        print(pk, name)
-        try:
-            instances = TournamentJoin.objects.filter(tournament_id=pk, name=name)
-            for instance in instances:
-                if instance.user is None:
-                    instance.delete()
-                    tournament = Tournaments.objects.get(pk=pk)
-                    tournament.no_of_joined -= 1
-                    tournament.save()
-                    print('deleted')
-                    return Response('deleted the instance', status=status.HTTP_200_OK)
-            print('not found')
-            return Response('deleted the instance', status=status.HTTP_404_NOT_FOUND)
-        except:
-            pass
-        print('error occured')
-        return Response('invalid data', status=status.HTTP_400_BAD_REQUEST)
+            pk = data['tournament']
+            name = data['name']
+            print(pk, name)
+            try:
+                instances = TournamentJoin.objects.filter(tournament_id=pk, name=name)
+                for instance in instances:
+                    if instance.user is None:
+                        instance.delete()
+                        tournament = Tournaments.objects.get(pk=pk)
+                        tournament.no_of_joined -= 1
+                        tournament.save()
+                        print('deleted')
+                        return Response('deleted the instance', status=status.HTTP_200_OK)
+                print('not found')
+                return Response('deleted the instance', status=status.HTTP_404_NOT_FOUND)
+            except:
+                pass
+            print('error occured')
+            return Response('invalid data', status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response('invalid API Key', status=status.HTTP_400_BAD_REQUEST)

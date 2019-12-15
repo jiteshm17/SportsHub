@@ -2,20 +2,25 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from rest_framework import status
+from rest_framework.response import Response
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
 
 from cart.models import OrderItem, Order, Transaction
 from shopping.models import Product
 from user_auth.forms import Contact_Form
-from user_auth.models import Profile
+from user_auth.models import Profile, Services
 from cart.extra import generate_order_id
 import datetime
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from paypal.standard.forms import PayPalPaymentsForm
+from cart.models import OrderLogs
 
 
 def make_payment(request):
@@ -182,3 +187,28 @@ def qtyupdate(request):
         item.save()
         order.save()
     return HttpResponse(" ")
+
+
+@api_view(['POST'])
+def get_logs(request):
+    if Services.objects.filter(token=request.GET.get('api_key'), service_type='Products').exists():
+        if request.method == 'POST':
+            data = JSONParser().parse(request)
+            try:
+                user = data['user']
+                print('User is',user)
+                product = data['product']
+                print('Product is',product)
+                cost = data['cost']
+                print('Cost is',cost)
+                qty = data['qty']
+                print('qty is',qty)
+                # print(user, product, cost, qty)
+                OrderLogs.objects.create(user=user, product=product, cost=cost, qty=qty)
+
+                return Response('User Logs created', status=status.HTTP_200_OK)
+            except:
+                return Response('Data not valid/sufficient', status=status.HTTP_400_BAD_REQUEST)
+
+    else:
+        return Response('Invalid API Key', status=status.HTTP_400_BAD_REQUEST)

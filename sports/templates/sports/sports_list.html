@@ -18,7 +18,7 @@
                         <!-- Post Thumbnail -->
                         <div class="post-thumbnail">
                             {% if sport.image %}
-                            <img src="{{ sport.image.url }}" alt="">
+                            <img src="{{ sport.image.url }}" alt=""  style="width: 260px;height: 150px">
                             {% else %}
                                 <img src="{% static 'news/img/default_sport.jpg' %}" alt="">
                             {% endif %}

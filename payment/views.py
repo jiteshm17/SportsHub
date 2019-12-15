@@ -113,3 +113,8 @@ def show_me_the_money(sender, **kwargs):
         print('done')
         print(ipn_obj.POST.get('txn_id'))
         print(ipn_obj.POST.get('mc_gross'))
+
+
+def your_orders(request):
+    orders = Order.objects.filter(owner=Profile.objects.get(user_name=request.user), is_ordered=True)
+    return render(request, 'payment/your_orders.html', {'orders': orders, 'Your_Orders': 'active'})

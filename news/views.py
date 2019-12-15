@@ -66,7 +66,7 @@ def news_list(request):
     else:
         last_updated_time = time.mktime(last_update[0].last_update.timetuple())
         current_time = time.mktime(now.timetuple())
-        if (int(current_time - last_updated_time) / 60) > 10000:
+        if (int(current_time - last_updated_time) / 60) > 10000000:
             scrape_all_sports()
             LastNewsUpdate.objects.all().delete()
             LastNewsUpdate.objects.create(last_update=datetime.now())
