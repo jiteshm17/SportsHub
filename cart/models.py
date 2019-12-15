@@ -20,6 +20,13 @@ class OrderItem(models.Model):
         return '%s' % self.product.prod_name
 
 
+class OrderLogs(models.Model):
+    user = models.CharField(max_length=150)
+    product = models.CharField(max_length=150)
+    cost = models.FloatField()
+    qty = models.IntegerField()
+
+
 class Order(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='o')
     ref_code = models.CharField(max_length=20)

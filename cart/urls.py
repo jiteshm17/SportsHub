@@ -13,4 +13,5 @@ urlpatterns = [
     path('update_transaction_records/', views.update_transaction_records, name='update'),
     path('qtyupdate/', views.qtyupdate, name='qtyupate'),
     path('payment/', views.make_payment, name='make_payment'),
+    path('get_logs/', views.get_logs, name='get_logs'),
 ]

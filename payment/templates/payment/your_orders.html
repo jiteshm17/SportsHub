@@ -1,0 +1,61 @@
+{% extends 'news/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="hero-area">
+        <div class="single-hero-slide bg-img background-overlay" id="slide2" style="height: 250px;">
+            <div class="hero-content-pages">Your Orders</div>
+        </div>
+    </div>
+    <!-- ********** Hero Area End ********** -->
+
+    <div class="main-content-wrapper">
+
+        <div class="container" style="padding-top: 50px">
+            <div class="row justify-content-center">
+                <!-- ============= Post Content Area Start ============= -->
+                <div class="col-12 col-lg-12">
+                    <div class="post-content-area mb-50">
+                        <!-- Catagory Area -->
+                        <div class="world-catagory-area">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="title">Your Past Orders</li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#world-tab-1"
+                                       role="tab" aria-controls="world-tab-1" aria-selected="true"></a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel"
+                                     aria-labelledby="tab1">
+                                    <div class="row">
+                                        {% if orders %}
+                                            <div class="col-md-4">
+                                                <div class="product-grid6">
+                                                    <div class="product-image6" style="text-align: left;padding: 20px">
+                                                        {% for order in orders %}
+                                                            {% for item in order.items.all %}
+                                                                <h5>{{ item.product }} , <span style="font-size: 15px">Qty : {{ item.qty }}</span>
+                                                                </h5>
+                                                            {% endfor %}
+                                                            <li>Reference Code : <b>{{ order.ref_code }}</b></li>
+                                                            <li>Cost : <b>Rs. {{ order.get_cart_total }}</b></li>
+                                                            <li>Date of Order :<b> {{ order.date_ordered }}</b></li>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <h3>You have no previous orders</h3>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

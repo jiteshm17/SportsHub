@@ -9,15 +9,14 @@
     <h2>There are currently no participants in this tournament</h2>
 
 {% else %}
-<div style="width: 80%;text-align: center;padding: 50px 0px 50px 200px ">
-    <table class="auto-index">
+<div class="container section-padding-50">
+    <center><h3>List of Participants Enrolled</h3></center>
+    <table>
   <tr>
-    <th>Serial number</th>
-    <td>Name </td>
-    <td>Email </td>
+    <th>Name </th>
+    <th>Email </th>
     {% for participant in participants %}
         <tr>
-        <td></td>
         <td>{{ participant.name }} </td>
         <td>{{ participant.mail }} </td>
         </tr>

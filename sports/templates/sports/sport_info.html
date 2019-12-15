@@ -32,12 +32,7 @@ active
                                 <li class="nav-item">
 
                                         <a class="nav-link" id="tab2" data-toggle="tab" href="#world-tab-2" role="tab"
-                                           aria-controls="world-tab-2" aria-selected="false">Vidoes</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="tab3" data-toggle="tab" href="#world-tab-3" role="tab"
-                                           aria-controls="world-tab-3" aria-selected="false">Neaby Sports Stores</a>
+                                           aria-controls="world-tab-2" aria-selected="false">Videos</a>
                                     </li>
 
                             </ul>
@@ -78,14 +73,6 @@ active
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="world-tab-3" role="tabpanel"
-                                     aria-labelledby="tab3">
-                                    <div class="row">
-
-                                    </div>
-                                </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -96,9 +83,9 @@ active
                     <div class="post-sidebar-area mb-100">
                         <!-- Widget Area -->
                         <div class="sidebar-widget-area">
-                            <h5 class="title">Sports</h5>
+                            <h5 class="title">{{ object.name }}</h5>
                             <div class="widget-content">
-
+ <img src="{{ object.image.url }}" alt=""  style="width: 260px;height: 150px">
                             </div>
                         </div>
                     </div>

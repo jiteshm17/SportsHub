@@ -19,9 +19,9 @@
     <link rel="stylesheet" href="{% static 'news/css/owl.carousel.css' %}">
     <link rel="stylesheet" href="{% static 'news/css/themify-icons.css' %}">
 
-{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
-{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>#}
-{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>#}
+    {#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>#}
+    {#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>#}
 
 
     <style>
@@ -214,11 +214,11 @@
         {% endblock %}
 
         #reservation.section {
-            padding-bottom:0px;
+            padding-bottom: 0px;
         }
 
-        #reservation .bg-image  {
-            height:75%;
+        #reservation .bg-image {
+            height: 75%;
         }
 
         .reserve-form {
@@ -229,11 +229,11 @@
             border-radius: 10px;
         }
 
-        .reserve-form  .form-group {
-            margin-bottom:30px;
+        .reserve-form .form-group {
+            margin-bottom: 30px;
         }
 
-        .reserve-form  .form-group label {
+        .reserve-form .form-group label {
             margin-left: 10px;
         }
 
@@ -248,21 +248,47 @@
             min-height: 220px;
         }
 
-        .opening-time:hover{
+        .opening-time:hover {
             box-shadow: 0 0 6px rgba(0, 0, 0, .2);
         }
 
         .opening-time ul li .day {
-            display:inline-block;
-            font-weight:400;
+            display: inline-block;
+            font-weight: 400;
         }
 
         .opening-time ul li .hours {
             float: right;
             font-size: 14px;
             margin-top: 12px;
-            font-weight:400;
-            color:#f36500;
+            font-weight: 400;
+            color: #f36500;
+        }
+
+        #myInput{
+            border : 1px solid #bfbfbf;
+            background-color: honeydew;
+            width: 300px;
+            padding : 5px 15px;
+            float: left;
+            border-radius: 25px;
+        }
+
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 80%;
+          margin: auto;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #dddddd;
         }
 
     </style>
@@ -313,6 +339,10 @@
                             </li>
                             <li class="nav-item {{ Shopping }}">
                                 <a class="nav-link" href={% url 'shopping:home' %}>Shopping</a>
+                            </li>
+
+                            <li class="nav-item {{ Your_Orders }}">
+                                <a class="nav-link" href={% url 'payment:show_orders' %}>Your Orders</a>
                             </li>
 
                             <li class="nav-item {{ Get_API_Key }}">
