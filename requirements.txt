@@ -3,7 +3,7 @@ beautifulsoup4==4.8.0
 bs4==0.0.1
 certifi==2019.9.11
 chardet==3.0.4
-Django==2.2.5
+Django==2.2.13
 django-bootstrap-form==3.4
 django-ckeditor==5.6.1
 django-crispy-forms==1.7.2
