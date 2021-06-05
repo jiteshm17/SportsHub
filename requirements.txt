@@ -14,7 +14,7 @@ django-paypal==1.0.0
 django-qr-code==1.0.0
 django-unixdatetimefield==1.0.3
 django-widget-tweaks==1.4.3
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 graphene==2.1.8
 graphene-django==2.6.0
 graphql-core==2.2.1
